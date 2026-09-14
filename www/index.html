@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Campus Companion</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Campus">
+<meta name="theme-color" content="#FAF6ED">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Anton&family=Playfair+Display:wght@600;700&family=EB+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body[data-theme="dark"]{
+--page:#050505;
+--phone-bg:#141414;
+--card:#1C1C1D;
+--card-2:#202021;
+--line:#2C2C2C;
+--text:#EDEAE1;
+--muted:#8B887E;
+--a1:#6EC9B0; --a1-dim:#1B2E29;
+--a2:#E88AA0; --a2-dim:#301C21;
+--a3:#8FBF6A; --a3-dim:#212B1A;
+--a4:#E8C468; --a4-dim:#2E2717;
+--danger:#E4805A; --danger-dim:#2E1E17;
+--accent-btn-bg:var(--a1); --accent-btn-text:#0B0B0C;
+--accent-strong:var(--a1);
+--success:var(--a1);
+--chat-user-bg:var(--a1-dim); --chat-user-text:var(--a1);
+--radius-card:8px; --radius-tag:4px; --radius-check:3px;
+--font-display:'Space Mono',monospace; --font-body:'IBM Plex Mono',monospace; --font-mono:'Space Mono',monospace;
+--title-transform:uppercase; --title-tracking:.5px; --title-weight:700; --title-size:15px;
+--section-underline:1px solid var(--line);
+--phone-border:8px solid #000;
+--phone-shadow:0 20px 60px rgba(0,0,0,.5);
+--date-scheme:dark;
+--date-icon-filter:invert(1);
+}
+/* Dark extras: a circuit-board / hex-node lattice scattered across the
+   header, in the accent palette. Pure CSS/SVG, positioned top-left so
+   it never sits under the settings gear (top-right). */
+body[data-theme="dark"] .phone{
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='120'%3E%3Cpolygon points='31.79,21.5 31.79,30.5 24,35 16.21,30.5 16.21,21.5 24,17' fill='none' stroke='%236EC9B0' stroke-width='1.2' stroke-opacity='0.16'/%3E%3Cpolygon points='83.2,17 83.2,23 78,26 72.8,23 72.8,17 78,14' fill='%236EC9B0' fill-opacity='0.1'/%3E%3Cpolygon points='93.79,67.5 93.79,76.5 86,81 78.21,76.5 78.21,67.5 86,63' fill='none' stroke='%236EC9B0' stroke-width='1.2' stroke-opacity='0.14'/%3E%3Cpolygon points='35.2,83 35.2,89 30,92 24.8,89 24.8,83 30,80' fill='%236EC9B0' fill-opacity='0.1'/%3E%3Cpolygon points='62.00,50.00 58.50,56.06 51.50,56.06 48.00,50.00 51.50,43.94 58.50,43.94' fill='none' stroke='%23E88AA0' stroke-width='1.1' stroke-opacity='0.14'/%3E%3Cpolygon points='140.00,60.00 137.50,64.33 132.50,64.33 130.00,60.00 132.50,55.67 137.50,55.67' fill='%238FBF6A' fill-opacity='0.12'/%3E%3Cpolygon points='160,30 160,38 153,42 146,38 146,30 153,26' fill='none' stroke='%236EC9B0' stroke-width='1.1' stroke-opacity='0.13'/%3E%3Cline x1='33' y1='26' x2='69' y2='21' stroke='%236EC9B0' stroke-opacity='0.12' stroke-width='1'/%3E%3Cline x1='83' y1='29' x2='84' y2='63' stroke='%236EC9B0' stroke-opacity='0.12' stroke-width='1'/%3E%3Cline x1='30' y1='35' x2='30' y2='80' stroke='%236EC9B0' stroke-opacity='0.1' stroke-width='1'/%3E%3Cline x1='86' y1='81' x2='135' y2='60' stroke='%236EC9B0' stroke-opacity='0.1' stroke-width='1'/%3E%3Cline x1='55' y1='44' x2='78' y2='23' stroke='%23E88AA0' stroke-opacity='0.1' stroke-width='1'/%3E%3Cline x1='153' y1='42' x2='140' y2='58' stroke='%236EC9B0' stroke-opacity='0.1' stroke-width='1'/%3E%3Crect x='104' y='75' width='6' height='6' fill='%23E8C468' fill-opacity='0.12'/%3E%3Crect x='170' y='70' width='4' height='4' fill='%236EC9B0' fill-opacity='0.14'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='150'%3E%3Cpolygon points='26.06,27.50 20.00,31.00 13.94,27.50 13.94,20.50 20.00,17.00 26.06,20.50' fill='none' stroke='%236EC9B0' stroke-width='1' stroke-opacity='0.08'/%3E%3Cpolygon points='95.20,103.00 90.00,106.00 84.80,103.00 84.80,97.00 90.00,94.00 95.20,97.00' fill='%23E88AA0' fill-opacity='0.07'/%3E%3Cpolygon points='59.33,137.50 55.00,140.00 50.67,137.50 50.67,132.50 55.00,130.00 59.33,132.50' fill='none' stroke='%238FBF6A' stroke-width='1' stroke-opacity='0.07'/%3E%3Cline x1='24' y1='30' x2='50' y2='60' stroke='%236EC9B0' stroke-opacity='0.06' stroke-width='1'/%3E%3C/svg%3E"),
+    radial-gradient(rgba(110,201,176,.05) 1px, transparent 1px);
+  background-size:190px 120px, 120px 150px, 5px 5px;
+  background-position:top left, top left, top left;
+  background-repeat:no-repeat, repeat, repeat;
+}
+body[data-theme="light"]{
+--page:#050505;
+--phone-bg:#FAF6ED;
+--card:#FFFFFF;
+--card-2:#FFFFFF;
+--line:#E7E0D0;
+--text:#2B2B2B;
+--muted:#7B7669;
+--a1:#33456B; --a1-dim:#E7EBF2;
+--a2:#8C2E15; --a2-dim:#FBE1D8;
+--a3:#3D5A41; --a3-dim:#E4EDE4;
+--a4:#8A5A16; --a4-dim:#FBEAD3;
+--danger:#8C2E15; --danger-dim:#FBE1D8;
+--accent-btn-bg:#1F2A44; --accent-btn-text:#FFFFFF;
+--accent-strong:#1F2A44;
+--success:#6B8F71;
+--chat-user-bg:#1F2A44; --chat-user-text:#FFFFFF;
+--radius-card:14px; --radius-tag:20px; --radius-check:50%;
+--font-display:'Fraunces',serif; --font-body:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace;
+--title-transform:none; --title-tracking:.2px; --title-weight:600; --title-size:22px;
+--section-underline:none;
+--phone-border:8px solid #16203A;
+--phone-shadow:0 20px 50px rgba(0,0,0,.25);
+--date-scheme:light;
+--date-icon-filter:none;
+}
+/* Light extras: a small constellation of graduation caps and a diploma
+   scroll, plus a couple of sparkles, watermarked top-left so the
+   settings gear (top-right) always stays clear of it. */
+body[data-theme="light"] .phone{
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='130'%3E%3Cg transform='translate(30,26) scale(1.0)'%3E%3Cpolygon points='0,-10 12,0 0,10 -12,0' fill='%2333456B' fill-opacity='0.12'/%3E%3Crect x='-4' y='0' width='8' height='5' rx='1' fill='%2333456B' fill-opacity='0.12'/%3E%3Cline x1='6' y1='-2' x2='8' y2='6' stroke='%2333456B' stroke-opacity='0.12' stroke-width='1'/%3E%3Ccircle cx='8' cy='7.5' r='1.6' fill='%2333456B' fill-opacity='0.12'/%3E%3C/g%3E%3Cg transform='translate(120,20) scale(0.7)'%3E%3Cpolygon points='0,-10 12,0 0,10 -12,0' fill='%2333456B' fill-opacity='0.1'/%3E%3Crect x='-4' y='0' width='8' height='5' rx='1' fill='%2333456B' fill-opacity='0.1'/%3E%3Cline x1='6' y1='-2' x2='8' y2='6' stroke='%2333456B' stroke-opacity='0.1' stroke-width='1'/%3E%3Ccircle cx='8' cy='7.5' r='1.6' fill='%2333456B' fill-opacity='0.1'/%3E%3C/g%3E%3Cg transform='translate(75,60) scale(0.85)'%3E%3Cpolygon points='0,-10 12,0 0,10 -12,0' fill='%2333456B' fill-opacity='0.11'/%3E%3Crect x='-4' y='0' width='8' height='5' rx='1' fill='%2333456B' fill-opacity='0.11'/%3E%3Cline x1='6' y1='-2' x2='8' y2='6' stroke='%2333456B' stroke-opacity='0.11' stroke-width='1'/%3E%3Ccircle cx='8' cy='7.5' r='1.6' fill='%2333456B' fill-opacity='0.11'/%3E%3C/g%3E%3Cg transform='translate(165,55) scale(0.6)'%3E%3Cpolygon points='0,-10 12,0 0,10 -12,0' fill='%2333456B' fill-opacity='0.09'/%3E%3Crect x='-4' y='0' width='8' height='5' rx='1' fill='%2333456B' fill-opacity='0.09'/%3E%3Cline x1='6' y1='-2' x2='8' y2='6' stroke='%2333456B' stroke-opacity='0.09' stroke-width='1'/%3E%3Ccircle cx='8' cy='7.5' r='1.6' fill='%2333456B' fill-opacity='0.09'/%3E%3C/g%3E%3Cg transform='translate(40,95) scale(0.55)'%3E%3Cpolygon points='0,-10 12,0 0,10 -12,0' fill='%2333456B' fill-opacity='0.09'/%3E%3Crect x='-4' y='0' width='8' height='5' rx='1' fill='%2333456B' fill-opacity='0.09'/%3E%3Cline x1='6' y1='-2' x2='8' y2='6' stroke='%2333456B' stroke-opacity='0.09' stroke-width='1'/%3E%3Ccircle cx='8' cy='7.5' r='1.6' fill='%2333456B' fill-opacity='0.09'/%3E%3C/g%3E%3Cpolygon points='150,90 172,90 172,108 161,114 150,108' fill='none' stroke='%2333456B' stroke-opacity='0.10' stroke-width='1'/%3E%3Cline x1='155' y1='97' x2='167' y2='97' stroke='%2333456B' stroke-opacity='0.10' stroke-width='1'/%3E%3Cline x1='155' y1='102' x2='167' y2='102' stroke='%2333456B' stroke-opacity='0.10' stroke-width='1'/%3E%3Cpolygon points='150.00,25.00 150.92,29.08 155.00,30.00 150.92,30.92 150.00,35.00 149.08,30.92 145.00,30.00 149.08,29.08' fill='%2333456B' fill-opacity='0.10'/%3E%3Cpolygon points='195.00,66.50 195.71,69.29 198.50,70.00 195.71,70.71 195.00,73.50 194.29,70.71 191.50,70.00 194.29,69.29' fill='%2333456B' fill-opacity='0.09'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='170'%3E%3Cpolygon points='24.00,26.80 24.92,29.08 27.20,30.00 24.92,30.92 24.00,33.20 23.08,30.92 20.80,30.00 23.08,29.08' fill='%2333456B' fill-opacity='0.07'/%3E%3Cpolygon points='104.00,107.40 104.78,109.22 106.60,110.00 104.78,110.78 104.00,112.60 103.22,110.78 101.40,110.00 103.22,109.22' fill='%2333456B' fill-opacity='0.06'/%3E%3Cpolygon points='60.00,147.80 60.64,149.36 62.20,150.00 60.64,150.64 60.00,152.20 59.36,150.64 57.80,150.00 59.36,149.36' fill='%238A5A16' fill-opacity='0.06'/%3E%3Cline x1='90' y1='40' x2='96' y2='46' stroke='%2333456B' stroke-opacity='0.06' stroke-width='1'/%3E%3C/svg%3E"),
+    radial-gradient(rgba(43,43,43,.035) 1px, transparent 1px);
+  background-size:220px 130px, 140px 170px, 6px 6px;
+  background-position:top left, top left, top left;
+  background-repeat:no-repeat, repeat, repeat;
+}
+body[data-theme="sunset"]{
+--page:#050505;
+--phone-bg:#FCEEDD;
+--card:#FFFFFF;
+--card-2:#FFF7EE;
+--line:#F0DAC2;
+--text:#3A2A1E;
+--muted:#9C8265;
+--a1:#E2793D; --a1-dim:#FBE7D4;
+--a2:#C24E63; --a2-dim:#FBE0E4;
+--a3:#B98A2E; --a3-dim:#F7ECD6;
+--a4:#8C5A9E; --a4-dim:#F0E3F4;
+--danger:#B94A32; --danger-dim:#FBE1D8;
+--accent-btn-bg:#E2793D; --accent-btn-text:#FFFFFF;
+--accent-strong:#C24E63;
+--success:#8A9A5B;
+--chat-user-bg:#E2793D; --chat-user-text:#FFFFFF;
+--radius-card:16px; --radius-tag:20px; --radius-check:50%;
+--font-display:'Fraunces',serif; --font-body:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace;
+--title-transform:none; --title-tracking:.2px; --title-weight:600; --title-size:22px;
+--section-underline:none;
+--phone-border:8px solid #C24E63;
+--phone-shadow:0 20px 50px rgba(194,78,99,.25);
+--date-scheme:light;
+--date-icon-filter:none;
+}
+/* Sunset extras: a sunburst over a low horizon line, with birds
+   drifting past and a couple of cloud strokes, watermarked top-left
+   so the settings gear (top-right) stays clear. */
+body[data-theme="sunset"] .phone{
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='210' height='110'%3E%3Cline x1='61.0' y1='42.0' x2='67.0' y2='42.0' stroke='%23E2793D' stroke-opacity='0.16' stroke-width='2'/%3E%3Cline x1='57.2' y1='51.2' x2='61.4' y2='55.4' stroke='%23E2793D' stroke-opacity='0.16' stroke-width='2'/%3E%3Cline x1='48.0' y1='55.0' x2='48.0' y2='61.0' stroke='%23E2793D' stroke-opacity='0.16' stroke-width='2'/%3E%3Cline x1='38.8' y1='51.2' x2='34.6' y2='55.4' stroke='%23E2793D' stroke-opacity='0.16' stroke-width='2'/%3E%3Cline x1='35.0' y1='42.0' x2='29.0' y2='42.0' stroke='%23E2793D' stroke-opacity='0.16' stroke-width='2'/%3E%3Cline x1='38.8' y1='32.8' x2='34.6' y2='28.6' stroke='%23E2793D' stroke-opacity='0.16' stroke-width='2'/%3E%3Cline x1='48.0' y1='29.0' x2='48.0' y2='23.0' stroke='%23E2793D' stroke-opacity='0.16' stroke-width='2'/%3E%3Cline x1='57.2' y1='32.8' x2='61.4' y2='28.6' stroke='%23E2793D' stroke-opacity='0.16' stroke-width='2'/%3E%3Ccircle cx='48' cy='42' r='13' fill='%23E2793D' fill-opacity='0.18'/%3E%3Cpath d='M90,20 Q94,15 98,20 Q102,15 106,20' fill='none' stroke='%23C24E63' stroke-opacity='0.18' stroke-width='1.6'/%3E%3Cpath d='M115,28 Q118.2,24.0 121.4,28 Q124.6,24.0 127.8,28' fill='none' stroke='%23C24E63' stroke-opacity='0.16' stroke-width='1.6'/%3E%3Cpath d='M140,16 Q142.4,13.0 144.8,16 Q147.2,13.0 149.6,16' fill='none' stroke='%23C24E63' stroke-opacity='0.14' stroke-width='1.6'/%3E%3Cline x1='150' y1='30' x2='190' y2='30' stroke='%23E2793D' stroke-opacity='0.10' stroke-width='2' stroke-linecap='round'/%3E%3Cline x1='160' y1='40' x2='195' y2='40' stroke='%23E2793D' stroke-opacity='0.08' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='180'%3E%3Cpath d='M20,30 Q24,25 28,30 Q32,25 36,30' fill='none' stroke='%23C24E63' stroke-opacity='0.10' stroke-width='1.4'/%3E%3Cpath d='M100,110 Q103.5,106 107,110 Q110.5,106 114,110' fill='none' stroke='%23E2793D' stroke-opacity='0.08' stroke-width='1.4'/%3E%3Cpolygon points='50.00,147.40 50.78,149.22 52.60,150.00 50.78,150.78 50.00,152.60 49.22,150.78 47.40,150.00 49.22,149.22' fill='%23C99A4A' fill-opacity='0.08'/%3E%3C/svg%3E"),
+    radial-gradient(rgba(226,121,61,.045) 1px, transparent 1px);
+  background-size:210px 110px, 160px 180px, 6px 6px;
+  background-position:top left, top left, top left;
+  background-repeat:no-repeat, repeat, repeat;
+}
+body[data-theme="dusk"]{
+--page:#050505;
+--phone-bg:#1F1512;
+--card:#2A1E19;
+--card-2:#241A16;
+--line:#3D2B22;
+--text:#F2E3D5;
+--muted:#B08F72;
+--a1:#E2793D; --a1-dim:#33231A;
+--a2:#C24E63; --a2-dim:#331D22;
+--a3:#C99A4A; --a3-dim:#332714;
+--a4:#A87BC4; --a4-dim:#2A2032;
+--danger:#D9704F; --danger-dim:#33201A;
+--accent-btn-bg:#E2793D; --accent-btn-text:#1F1512;
+--accent-strong:#E2793D;
+--success:#8FAE5E;
+--chat-user-bg:var(--a1-dim); --chat-user-text:var(--a1);
+--radius-card:16px; --radius-tag:20px; --radius-check:50%;
+--font-display:'Fraunces',serif; --font-body:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace;
+--title-transform:none; --title-tracking:.2px; --title-weight:600; --title-size:22px;
+--section-underline:none;
+--phone-border:10px solid #0F0907;
+--phone-shadow:0 20px 60px rgba(226,121,61,.25);
+--date-scheme:dark;
+--date-icon-filter:invert(1);
+}
+/* Dusk extras: sunset's sun has become a crescent moon (a circle
+   knocked out by a phone-bg-colored circle) over a dark horizon, with
+   five stars and a shooting-star streak, watermarked top-left. */
+body[data-theme="dusk"] .phone{
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='210' height='110'%3E%3Ccircle cx='45' cy='32' r='16' fill='%23D9B36A' fill-opacity='0.20'/%3E%3Ccircle cx='51' cy='27' r='14' fill='%231F1512'/%3E%3Cpolygon points='30.00,13.00 30.92,17.08 35.00,18.00 30.92,18.92 30.00,23.00 29.08,18.92 25.00,18.00 29.08,17.08' fill='%23A87BC4' fill-opacity='0.20'/%3E%3Cpolygon points='60.00,41.50 60.71,44.29 63.50,45.00 60.71,45.71 60.00,48.50 59.29,45.71 56.50,45.00 59.29,44.29' fill='%23A87BC4' fill-opacity='0.18'/%3E%3Cpolygon points='150.00,10.50 150.85,14.15 154.50,15.00 150.85,15.85 150.00,19.50 149.15,15.85 145.50,15.00 149.15,14.15' fill='%23A87BC4' fill-opacity='0.18'/%3E%3Cpolygon points='175.00,47.00 175.57,49.43 178.00,50.00 175.57,50.57 175.00,53.00 174.43,50.57 172.00,50.00 174.43,49.43' fill='%23A87BC4' fill-opacity='0.16'/%3E%3Cpolygon points='120.00,61.80 120.64,64.36 123.20,65.00 120.64,65.64 120.00,68.20 119.36,65.64 116.80,65.00 119.36,64.36' fill='%23A87BC4' fill-opacity='0.14'/%3E%3Cline x1='95' y1='8' x2='130' y2='30' stroke='%23A87BC4' stroke-opacity='0.14' stroke-width='1' stroke-dasharray='1,3'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='170'%3E%3Cpolygon points='30.00,23.20 30.78,25.22 32.80,26.00 30.78,26.78 30.00,28.80 29.22,26.78 27.20,26.00 29.22,25.22' fill='%23A87BC4' fill-opacity='0.14'/%3E%3Cpolygon points='100.00,87.80 100.64,89.36 102.20,90.00 100.64,90.64 100.00,92.20 99.36,90.64 97.80,90.00 99.36,89.36' fill='%23A87BC4' fill-opacity='0.11'/%3E%3Cpolygon points='60.00,138.10 60.57,139.43 61.90,140.00 60.57,140.57 60.00,141.90 59.43,140.57 58.10,140.00 59.43,139.43' fill='%23C99A4A' fill-opacity='0.10'/%3E%3Cline x1='80' y1='40' x2='86' y2='34' stroke='%23A87BC4' stroke-opacity='0.08' stroke-width='1' stroke-dasharray='1,2'/%3E%3C/svg%3E"),
+    radial-gradient(rgba(0,0,0,.35) 1px, transparent 1px),
+    radial-gradient(rgba(242,227,213,.045) 1px, transparent 1px);
+  background-size:210px 110px, 140px 170px, 3px 3px, 5px 5px;
+  background-position:top left, top left, 0 0, 2px 2px;
+  background-repeat:no-repeat, repeat, repeat, repeat;
+}
+body[data-theme="ocean"]{
+--page:#050505;
+--phone-bg:#EAF3F5;
+--card:#FFFFFF;
+--card-2:#F3FAFB;
+--line:#D6E7EA;
+--text:#1E3336;
+--muted:#6D8A8E;
+--a1:#1B7A8C; --a1-dim:#DCEFF1;
+--a2:#2E5E8C; --a2-dim:#DEE8F2;
+--a3:#3E8C6F; --a3-dim:#DEF0E8;
+--a4:#5B7A99; --a4-dim:#E4EAF1;
+--danger:#B0483C; --danger-dim:#F7E1DD;
+--accent-btn-bg:#1B7A8C; --accent-btn-text:#FFFFFF;
+--accent-strong:#1B7A8C;
+--success:#3E8C6F;
+--chat-user-bg:#1B7A8C; --chat-user-text:#FFFFFF;
+--radius-card:16px; --radius-tag:20px; --radius-check:50%;
+--font-display:'Fraunces',serif; --font-body:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace;
+--title-transform:none; --title-tracking:.2px; --title-weight:600; --title-size:22px;
+--section-underline:none;
+--phone-border:8px solid #1B4C5A;
+--phone-shadow:0 20px 50px rgba(27,122,140,.25);
+--date-scheme:light;
+--date-icon-filter:none;
+}
+/* Ocean extras: a low sun over two stacked wave lines, with rising
+   bubbles, a fish and a starfish, watermarked top-left. */
+body[data-theme="ocean"] .phone{
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='230' height='95'%3E%3Cpath d='M0,50 C13,42 27,42 40,50 C53,58 67,58 80,50 C93,42 107,42 120,50 C133,58 147,58 160,50 C173,42 187,42 200,50 C210,54 220,54 230,50' fill='none' stroke='%231B7A8C' stroke-opacity='0.20' stroke-width='2.2'/%3E%3Cpath d='M0,64 C13,58 27,58 40,64 C53,70 67,70 80,64 C93,58 107,58 120,64 C133,70 147,70 160,64 C173,58 187,58 200,64 C210,68 220,68 230,64' fill='none' stroke='%232E5E8C' stroke-opacity='0.14' stroke-width='1.8'/%3E%3Ccircle cx='185' cy='20' r='11' fill='%23E8C468' fill-opacity='0.16'/%3E%3Ccircle cx='30' cy='18' r='4' fill='%231B7A8C' fill-opacity='0.16'/%3E%3Ccircle cx='50' cy='10' r='2.5' fill='%233E8C6F' fill-opacity='0.18'/%3E%3Ccircle cx='65' cy='24' r='3' fill='%231B7A8C' fill-opacity='0.12'/%3E%3Cpath d='M110,15 Q115,8 122,10 Q120,16 110,15' fill='%232E5E8C' fill-opacity='0.16'/%3E%3Cpath d='M15,80 L20,72 L25,80 L22,78 L22,84 L18,84 L18,78 Z' fill='%233E8C6F' fill-opacity='0.14'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='180'%3E%3Ccircle cx='24' cy='30' r='2.6' fill='%231B7A8C' fill-opacity='0.10'/%3E%3Ccircle cx='40' cy='20' r='1.6' fill='%233E8C6F' fill-opacity='0.10'/%3E%3Cpath d='M90,120 C93,116 97,116 100,120 C103,124 107,124 110,120' fill='none' stroke='%232E5E8C' stroke-opacity='0.09' stroke-width='1.3'/%3E%3C/svg%3E"),
+    radial-gradient(rgba(27,122,140,.04) 1px, transparent 1px);
+  background-size:230px 95px, 150px 180px, 5px 5px;
+  background-position:top left, top left, top left;
+  background-repeat:no-repeat, repeat, repeat;
+}
+body[data-theme="midnightwaves"]{
+--page:#050505;
+--phone-bg:#0B1A1D;
+--card:#12262A;
+--card-2:#0F2024;
+--line:#1F3A3F;
+--text:#DCEEF0;
+--muted:#7FA3A8;
+--a1:#2FA8BE; --a1-dim:#123037;
+--a2:#4A7FB8; --a2-dim:#16283A;
+--a3:#4FAE87; --a3-dim:#12332A;
+--a4:#7B93B0; --a4-dim:#1E2530;
+--danger:#D9705C; --danger-dim:#33201A;
+--accent-btn-bg:#2FA8BE; --accent-btn-text:#08181A;
+--accent-strong:#2FA8BE;
+--success:#4FAE87;
+--chat-user-bg:var(--a1-dim); --chat-user-text:var(--a1);
+--radius-card:16px; --radius-tag:20px; --radius-check:50%;
+--font-display:'Fraunces',serif; --font-body:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace;
+--title-transform:none; --title-tracking:.2px; --title-weight:600; --title-size:22px;
+--section-underline:none;
+--phone-border:10px solid #071316;
+--phone-shadow:0 20px 60px rgba(47,168,190,.25);
+--date-scheme:dark;
+--date-icon-filter:invert(1);
+}
+/* Midnight Waves extras: Ocean's waves at night — a crescent moon
+   (knocked out to the phone-bg color), a scatter of stars, waves, and
+   a small sailboat silhouette, watermarked top-left. */
+body[data-theme="midnightwaves"] .phone{
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='230' height='95'%3E%3Cpath d='M0,55 C13,45 27,45 40,55 C53,65 67,65 80,55 C93,45 107,45 120,55 C133,65 147,65 160,55 C173,45 187,45 200,55 C210,60 220,60 230,55' fill='none' stroke='%232FA8BE' stroke-opacity='0.24' stroke-width='2.2'/%3E%3Cpath d='M0,70 C13,64 27,64 40,70 C53,76 67,76 80,70 C93,64 107,64 120,70 C133,76 147,76 160,70 C173,64 187,64 200,70 C210,74 220,74 230,70' fill='none' stroke='%234A7FB8' stroke-opacity='0.16' stroke-width='1.8'/%3E%3Ccircle cx='170' cy='16' r='10' fill='%237B93B0' fill-opacity='0.18'/%3E%3Ccircle cx='175' cy='12' r='8.7' fill='%230B1A1D'/%3E%3Cpolygon points='40.00,8.50 40.99,13.01 45.50,14.00 40.99,14.99 40.00,19.50 39.01,14.99 34.50,14.00 39.01,13.01' fill='%237B93B0' fill-opacity='0.20'/%3E%3Cpolygon points='90.00,6.00 90.78,9.22 94.00,10.00 90.78,10.78 90.00,14.00 89.22,10.78 86.00,10.00 89.22,9.22' fill='%237B93B0' fill-opacity='0.18'/%3E%3Cpolygon points='130.00,15.50 130.85,19.15 134.50,20.00 130.85,20.85 130.00,24.50 129.15,20.85 125.50,20.00 129.15,19.15' fill='%237B93B0' fill-opacity='0.16'/%3E%3Cpolygon points='20.00,31.80 20.64,34.36 23.20,35.00 20.64,35.64 20.00,38.20 19.36,35.64 16.80,35.00 19.36,34.36' fill='%237B93B0' fill-opacity='0.16'/%3E%3Cpath d='M100,80 L108,80 L104,70 Z' fill='%234A7FB8' fill-opacity='0.16'/%3E%3Cline x1='104' y1='70' x2='104' y2='80' stroke='%234A7FB8' stroke-opacity='0.16' stroke-width='1'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='170'%3E%3Cpolygon points='28.00,21.60 28.71,23.29 30.40,24.00 28.71,24.71 28.00,26.40 27.29,24.71 25.60,24.00 27.29,23.29' fill='%237B93B0' fill-opacity='0.16'/%3E%3Cpolygon points='95.00,93.00 95.60,94.40 97.00,95.00 95.60,95.60 95.00,97.00 94.40,95.60 93.00,95.00 94.40,94.40' fill='%237B93B0' fill-opacity='0.13'/%3E%3Cpath d='M50,140 C54,136 58,136 62,140 C66,144 70,144 74,140' fill='none' stroke='%232FA8BE' stroke-opacity='0.10' stroke-width='1.3'/%3E%3C/svg%3E"),
+    radial-gradient(rgba(0,0,0,.3) 1px, transparent 1px),
+    radial-gradient(rgba(220,238,240,.045) 1px, transparent 1px);
+  background-size:230px 95px, 140px 170px, 3px 3px, 5px 5px;
+  background-position:top left, top left, 0 0, 2px 2px;
+  background-repeat:no-repeat, repeat, repeat, repeat;
+}
+body[data-theme="forest"]{
+--page:#050505;
+--phone-bg:#111813;
+--card:#182018;
+--card-2:#1C251D;
+--line:#2A362B;
+--text:#E4EAE0;
+--muted:#8A9A85;
+--a1:#7FBF6C; --a1-dim:#1F2E1C;
+--a2:#D9A441; --a2-dim:#332912;
+--a3:#5FA88C; --a3-dim:#182B24;
+--a4:#C97B5A; --a4-dim:#2E2015;
+--danger:#D9704F; --danger-dim:#2E1D16;
+--accent-btn-bg:#7FBF6C; --accent-btn-text:#0B120C;
+--accent-strong:#7FBF6C;
+--success:#7FBF6C;
+--chat-user-bg:#1F2E1C; --chat-user-text:#7FBF6C;
+--radius-card:8px; --radius-tag:4px; --radius-check:3px;
+--font-display:'Space Mono',monospace; --font-body:'IBM Plex Mono',monospace; --font-mono:'Space Mono',monospace;
+--title-transform:uppercase; --title-tracking:.5px; --title-weight:700; --title-size:15px;
+--section-underline:1px solid var(--line);
+--phone-border:8px solid #0B120C;
+--phone-shadow:0 20px 60px rgba(0,0,0,.5);
+--date-scheme:dark;
+--date-icon-filter:invert(1);
+}
+/* Forest extras: a mountain ridge behind a small pine canopy, with a
+   couple of birds and a hanging vine, watermarked top-left. */
+body[data-theme="forest"] .phone{
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='210' height='115'%3E%3Cg transform='translate(0,72) scale(1.0)'%3E%3Cpolygon points='13.9,0 38.1,0 26,-13.2' fill='%237FBF6C' fill-opacity='0.18'/%3E%3Cpolygon points='16.65,-8.18 35.35,-8.18 26,-20.28' fill='%237FBF6C' fill-opacity='0.18'/%3E%3Cpolygon points='19.4,-15.69 32.6,-15.69 26,-26.69' fill='%237FBF6C' fill-opacity='0.18'/%3E%3Crect x='23.8' y='0' width='4.4' height='6.6' fill='%237FBF6C' fill-opacity='0.18'/%3E%3C/g%3E%3Cg transform='translate(48,80) scale(0.75)'%3E%3Cpolygon points='13.9,0 38.1,0 26,-13.2' fill='%237FBF6C' fill-opacity='0.14'/%3E%3Cpolygon points='16.65,-8.18 35.35,-8.18 26,-20.28' fill='%237FBF6C' fill-opacity='0.14'/%3E%3Cpolygon points='19.4,-15.69 32.6,-15.69 26,-26.69' fill='%237FBF6C' fill-opacity='0.14'/%3E%3Crect x='23.8' y='0' width='4.4' height='6.6' fill='%237FBF6C' fill-opacity='0.14'/%3E%3C/g%3E%3Cg transform='translate(-18,85) scale(0.6)'%3E%3Cpolygon points='13.9,0 38.1,0 26,-13.2' fill='%237FBF6C' fill-opacity='0.12'/%3E%3Cpolygon points='16.65,-8.18 35.35,-8.18 26,-20.28' fill='%237FBF6C' fill-opacity='0.12'/%3E%3Cpolygon points='19.4,-15.69 32.6,-15.69 26,-26.69' fill='%237FBF6C' fill-opacity='0.12'/%3E%3Crect x='23.8' y='0' width='4.4' height='6.6' fill='%237FBF6C' fill-opacity='0.12'/%3E%3C/g%3E%3Cg transform='translate(85,90) scale(0.55)'%3E%3Cpolygon points='13.9,0 38.1,0 26,-13.2' fill='%237FBF6C' fill-opacity='0.11'/%3E%3Cpolygon points='16.65,-8.18 35.35,-8.18 26,-20.28' fill='%237FBF6C' fill-opacity='0.11'/%3E%3Cpolygon points='19.4,-15.69 32.6,-15.69 26,-26.69' fill='%237FBF6C' fill-opacity='0.11'/%3E%3Crect x='23.8' y='0' width='4.4' height='6.6' fill='%237FBF6C' fill-opacity='0.11'/%3E%3C/g%3E%3Cpath d='M150,20 Q155,14 160,20' fill='none' stroke='%23D9A441' stroke-opacity='0.18' stroke-width='1.4'/%3E%3Cpath d='M170,28 Q175,22 180,28' fill='none' stroke='%23D9A441' stroke-opacity='0.16' stroke-width='1.4'/%3E%3Cpath d='M130,72 C126,68 126,62 130,60 C132,56 138,56 140,60 C144,60 146,66 142,70 C144,74 140,78 136,76 C132,80 128,76 130,72 Z' fill='%235FA88C' fill-opacity='0.10'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='170'%3E%3Cg transform='translate(20,30) scale(0.35)'%3E%3Cpolygon points='13.9,0 38.1,0 26,-13.2' fill='%237FBF6C' fill-opacity='0.10'/%3E%3Cpolygon points='16.65,-8.18 35.35,-8.18 26,-20.28' fill='%237FBF6C' fill-opacity='0.10'/%3E%3Cpolygon points='19.4,-15.69 32.6,-15.69 26,-26.69' fill='%237FBF6C' fill-opacity='0.10'/%3E%3Crect x='23.8' y='0' width='4.4' height='6.6' fill='%237FBF6C' fill-opacity='0.10'/%3E%3C/g%3E%3Ccircle cx='100' cy='110' r='2.4' fill='%235FA88C' fill-opacity='0.10'/%3E%3Cpath d='M60,150 Q63,146 66,150' fill='none' stroke='%23D9A441' stroke-opacity='0.09' stroke-width='1.2'/%3E%3C/svg%3E"),
+    radial-gradient(rgba(0,0,0,.35) 1px, transparent 1px),
+    radial-gradient(rgba(228,234,224,.04) 1px, transparent 1px);
+  background-size:210px 115px, 140px 170px, 3px 3px, 5px 5px;
+  background-position:top left, top left, 0 0, 2px 2px;
+  background-repeat:no-repeat, repeat, repeat, repeat;
+}
+body[data-theme="grunge"]{
+--page:#050505;
+--phone-bg:#17140F;
+--card:#221E17;
+--card-2:#2A251C;
+--line:#3D3627;
+--text:#EDE7D9;
+--muted:#A39C89;
+--a1:#C8202E; --a1-dim:#2E1113;
+--a2:#8B8570; --a2-dim:#211F19;
+--a3:#E5DFC9; --a3-dim:#26241D;
+--a4:#6E2A1E; --a4-dim:#2A1712;
+--danger:#C8202E; --danger-dim:#2E1113;
+--accent-btn-bg:#C8202E; --accent-btn-text:#F5F1E4;
+--accent-strong:#C8202E;
+--success:#8B8570;
+--chat-user-bg:#2E1113; --chat-user-text:#C8202E;
+--radius-card:2px; --radius-tag:2px; --radius-check:2px;
+--font-display:'Anton',sans-serif; --font-body:'IBM Plex Mono',monospace; --font-mono:'Space Mono',monospace;
+--title-transform:uppercase; --title-tracking:.5px; --title-weight:400; --title-size:17px;
+--section-underline:1px dashed var(--line);
+--phone-border:10px solid #0B0906;
+--phone-shadow:0 20px 60px rgba(200,32,46,.25);
+--date-scheme:dark;
+--date-icon-filter:invert(1);
+}
+/* Grunge extras, referencing the band-tee stars brief: a red/black
+   xerox-misprint on the big title, a speckled halftone-dot grain on the
+   phone background, and a tiled spray-stencil star pattern (three precise
+   5-point star polygons — a white outline, a solid red one, a solid black
+   one) behind the header. All pure CSS/SVG, no external images. */
+body[data-theme="grunge"] .topbar h1{
+  text-shadow:1.5px 0 0 rgba(200,32,46,.5), -1px 0 0 rgba(0,0,0,.5);
+}
+body[data-theme="grunge"] .phone{
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cpolygon points='25.3,17.3 30.1,25.2 39.3,23.5 33.2,30.5 37.7,38.7 29.1,35.1 22.7,41.9 23.5,32.6 15.1,28.6 24.1,26.5' fill='none' stroke='%23EDE7D9' stroke-width='1.3' stroke-opacity='0.14'/%3E%3Cpolygon points='115.6,66.3 119.3,84.4 137.6,87.5 121.4,96.6 124.2,115.0 110.5,102.4 93.9,110.7 101.7,93.8 88.6,80.6 107.1,82.7' fill='%23C8202E' fill-opacity='0.16' stroke='%230B0906' stroke-opacity='0.22' stroke-width='2'/%3E%3Cpolygon points='41.8,127.7 41.6,135.5 49.0,138.4 41.5,140.7 41.0,148.6 36.5,142.1 28.9,144.2 33.6,137.8 29.3,131.2 36.8,133.8' fill='%230B0906' fill-opacity='0.28'/%3E%3Cpolygon points='135.00,19.00 136.41,23.06 140.71,23.15 137.28,25.74 138.53,29.85 135.00,27.40 131.47,29.85 132.72,25.74 129.29,23.15 133.59,23.06' fill='%23EDE7D9' fill-opacity='0.14'/%3E%3Cpolygon points='20.00,105.00 21.18,108.38 24.76,108.45 21.90,110.62 22.94,114.05 20.00,112.00 17.06,114.05 18.10,110.62 15.24,108.45 18.82,108.38' fill='%23C8202E' fill-opacity='0.16'/%3E%3Cpath d='M60,10 L52,28 L58,28 L48,50' fill='none' stroke='%23EDE7D9' stroke-opacity='0.10' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"),
+    radial-gradient(rgba(0,0,0,.4) 1px, transparent 1px),
+    radial-gradient(rgba(237,231,217,.05) 1px, transparent 1px);
+  background-size:160px 160px, 3px 3px, 5px 5px;
+  background-position:0 0, 0 0, 2px 2px;
+  background-repeat:repeat, repeat, repeat;
+}
+body[data-theme="nevermore"]{
+--page:#050505;
+--phone-bg:#0C0B09;
+--card:#17140F;
+--card-2:#1E1A14;
+--line:#3A332A;
+--text:#EDE6D3;
+--muted:#9C927E;
+--a1:#B8A06B; --a1-dim:#2B2618;
+--a2:#6B3A35; --a2-dim:#241613;
+--a3:#5C6470; --a3-dim:#1C1F24;
+--a4:#D8D0BC; --a4-dim:#2A271E;
+--danger:#6B3A35; --danger-dim:#241613;
+--accent-btn-bg:#B8A06B; --accent-btn-text:#17140F;
+--accent-strong:#B8A06B;
+--success:#5C6470;
+--chat-user-bg:#2B2618; --chat-user-text:#B8A06B;
+--radius-card:4px; --radius-tag:3px; --radius-check:3px;
+--font-display:'Playfair Display',serif; --font-body:'EB Garamond',serif; --font-mono:'JetBrains Mono',monospace;
+--title-transform:none; --title-tracking:.3px; --title-weight:700; --title-size:22px;
+--section-underline:1px solid var(--line);
+--phone-border:10px solid #050403;
+--phone-shadow:0 20px 60px rgba(0,0,0,.65);
+--date-scheme:dark;
+--date-icon-filter:invert(1);
+}
+/* Nevermore extras, referencing the gothic-collage brief: a precise 8-point
+   compass-star watermark (the reference's "Stay," centerpiece) behind the
+   header, a raven silhouette on the opposite side (so the settings gear,
+   which sits over the star's corner, never has to compete with it), a
+   torn-paper zigzag edge under the topbar, and a faint sepia grain for an
+   aged-photograph feel. All pure CSS/SVG, no external images. */
+body[data-theme="nevermore"] .topbar{
+  padding-bottom:22px;
+}
+body[data-theme="nevermore"] .topbar::after{
+  content:'';
+  position:absolute; left:0; right:0; bottom:0; height:10px;
+  background:var(--card);
+  clip-path:polygon(0% 0px, 0.00% 10px, 5.56% 3.5px, 11.11% 10px, 16.67% 3.5px, 22.22% 10px, 27.78% 3.5px, 33.33% 10px, 38.89% 3.5px, 44.44% 10px, 50.00% 3.5px, 55.56% 10px, 61.11% 3.5px, 66.67% 10px, 72.22% 3.5px, 77.78% 10px, 83.33% 3.5px, 88.89% 10px, 94.44% 3.5px, 100.00% 10px, 100% 0px);
+}
+body[data-theme="nevermore"] .phone{
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cpolygon points='70.0,28.0 75.4,57.1 99.7,40.3 82.9,64.6 112.0,70.0 82.9,75.4 99.7,99.7 75.4,82.9 70.0,112.0 64.6,82.9 40.3,99.7 57.1,75.4 28.0,70.0 57.1,64.6 40.3,40.3 64.6,57.1' fill='%23D8D0BC' fill-opacity='0.1' stroke='%230C0B09' stroke-opacity='0.22' stroke-width='1.4'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cpath d='M20,45 C14,38 15,28 24,26 C22,20 27,14 33,17 C36,12 44,13 45,19 C52,17 58,23 55,29 C62,29 65,37 58,41 C60,47 54,53 48,50 C46,56 38,57 35,51 C28,54 21,50 20,45 Z' fill='%236B3A35' fill-opacity='0.14'/%3E%3Cpath d='M45,19 L58,10 L52,22 Z' fill='%236B3A35' fill-opacity='0.14'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='130' height='160'%3E%3Ccircle cx='22' cy='28' r='1.8' fill='%236B3A35' fill-opacity='0.10'/%3E%3Ccircle cx='30' cy='34' r='1.0' fill='%236B3A35' fill-opacity='0.08'/%3E%3Ccircle cx='95' cy='110' r='1.6' fill='%23B8A06B' fill-opacity='0.09'/%3E%3Ccircle cx='60' cy='140' r='1.1' fill='%236B3A35' fill-opacity='0.08'/%3E%3C/svg%3E"),
+    radial-gradient(rgba(184,160,107,.05) 1px, transparent 1px);
+  background-size:140px 140px, 90px 90px, 130px 160px, 4px 4px;
+  background-position:top right, top left, top left, top left;
+  background-repeat:no-repeat, no-repeat, repeat, repeat;
+}
+*{box-sizing:border-box;}
+  * {
+  -webkit-tap-highlight-color: transparent;   /* kills the blue tap flash */
+  -webkit-touch-callout: none;                /* stops long-press menus */
+}
+button, .toolcard, .navbtn, .checkcircle, .back-row, .settings-gear, .section-label {
+  user-select: none;                          /* stops text-selection highlight on taps */
+  -webkit-user-select: none;
+}
+body{margin:0;background:var(--page);font-family:var(--font-body);color:var(--text);display:flex;justify-content:center;padding:32px 12px;}
+.phone{
+width:390px;height:780px;background:var(--phone-bg);border-radius:36px;
+border:var(--phone-border);box-shadow:var(--phone-shadow);
+display:flex;flex-direction:column;overflow:hidden;position:relative;
+}
+@media (max-width:480px){
+body{padding:0;min-height:100vh;}
+.phone{
+width:100vw;height:100vh;height:100dvh;border-radius:0;border:none;box-shadow:none;
+}
+.status{height:env(safe-area-inset-top,14px);}
+.navbar{padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));}
+}
+.status{height:14px;flex-shrink:0;}
+.settings-gear{
+position:absolute;right:20px;top:22px;width:32px;height:32px;border-radius:50%;
+background:var(--card);border:1px solid var(--line);color:var(--text);display:flex;align-items:center;justify-content:center;
+cursor:pointer;font-size:15px;
+}
+.topbar{padding:26px 20px 14px;flex-shrink:0;position:relative;}
+.topbar h1{
+font-family:var(--font-display);font-weight:var(--title-weight);font-size:var(--title-size);margin:0;color:var(--text);letter-spacing:var(--title-tracking);text-transform:var(--title-transform);
+}
+.topbar p{margin:4px 0 0;font-size:11.5px;color:var(--muted);letter-spacing:.3px;}
+.screen{flex:1;overflow-y:auto;padding:4px 20px 90px;}
+.screen::-webkit-scrollbar{display:none;}
+.hidden{display:none !important;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-card);padding:13px 15px;margin-bottom:10px;}
+.card h3{margin:0 0 4px;font-size:13.5px;font-weight:500;color:var(--text);font-family:var(--font-body);}
+.row{display:flex;align-items:center;justify-content:space-between;}
+.muted{color:var(--muted);}
+.small{font-size:11.5px;}
+.tag{display:inline-block;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:var(--radius-tag);letter-spacing:.3px;}
+.tag-amber{background:var(--a4-dim);color:var(--a4);}
+.tag-sage{background:var(--a3-dim);color:var(--a3);}
+.tag-coral{background:var(--danger-dim);color:var(--danger);}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:18px 0 8px;padding-bottom:5px;border-bottom:var(--section-underline);color:var(--muted);}
+.section-label:first-child{margin-top:4px;}
+body[data-theme="dark"] .section-label:nth-of-type(4n+1),
+body[data-theme="forest"] .section-label:nth-of-type(4n+1),
+body[data-theme="grunge"] .section-label:nth-of-type(4n+1),
+body[data-theme="nevermore"] .section-label:nth-of-type(4n+1),
+body[data-theme="dusk"] .section-label:nth-of-type(4n+1),
+body[data-theme="midnightwaves"] .section-label:nth-of-type(4n+1){color:var(--a1);}
+body[data-theme="dark"] .section-label:nth-of-type(4n+2),
+body[data-theme="forest"] .section-label:nth-of-type(4n+2),
+body[data-theme="grunge"] .section-label:nth-of-type(4n+2),
+body[data-theme="nevermore"] .section-label:nth-of-type(4n+2),
+body[data-theme="dusk"] .section-label:nth-of-type(4n+2),
+body[data-theme="midnightwaves"] .section-label:nth-of-type(4n+2){color:var(--a2);}
+body[data-theme="dark"] .section-label:nth-of-type(4n+3),
+body[data-theme="forest"] .section-label:nth-of-type(4n+3),
+body[data-theme="grunge"] .section-label:nth-of-type(4n+3),
+body[data-theme="nevermore"] .section-label:nth-of-type(4n+3),
+body[data-theme="dusk"] .section-label:nth-of-type(4n+3),
+body[data-theme="midnightwaves"] .section-label:nth-of-type(4n+3){color:var(--a3);}
+body[data-theme="dark"] .section-label:nth-of-type(4n+4),
+body[data-theme="forest"] .section-label:nth-of-type(4n+4),
+body[data-theme="grunge"] .section-label:nth-of-type(4n+4),
+body[data-theme="nevermore"] .section-label:nth-of-type(4n+4),
+body[data-theme="dusk"] .section-label:nth-of-type(4n+4),
+body[data-theme="midnightwaves"] .section-label:nth-of-type(4n+4){color:var(--a4);}
+.navbar{
+position:absolute;bottom:0;left:0;right:0;height:74px;background:var(--card);
+border-top:1px solid var(--line);display:flex;padding-bottom:12px;
+}
+.navbtn{
+flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+background:none;border:none;color:var(--muted);font-family:inherit;font-size:10px;cursor:pointer;padding:8px 0 0;
+}
+.navbtn svg{display:block;}
+.navbtn.active{color:var(--text);}
+.navbtn.active svg{color:var(--accent-strong);}
+.fab-btn{background:var(--accent-btn-bg);color:var(--accent-btn-text);border:none;border-radius:8px;padding:8px 14px;font-size:12.5px;font-weight:700;font-family:var(--font-body);cursor:pointer;}
+.fab-btn:active{transform:scale(.97);}
+.ghost-btn{background:none;border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:12px;font-family:var(--font-body);cursor:pointer;color:var(--text);}
+input[type=text],input[type=number],select,textarea{
+width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-family:var(--font-body);font-size:12.5px;background:var(--card-2);color:var(--text);
+}
+input::placeholder,textarea::placeholder{color:var(--muted);}
+textarea{resize:none;}
+select{appearance:none;}
+.checkcircle{width:18px;height:18px;border-radius:var(--radius-check);border:1.5px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.checkcircle.done{background:var(--success);border-color:var(--success);color:#fff;font-size:11px;}
+.task-title.done{text-decoration:line-through;color:var(--muted);}
+.toolgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.toolcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-card);padding:15px 13px;cursor:pointer;}
+.toolcard i{font-size:20px;color:var(--accent-strong);}
+.toolcard h3{margin:10px 0 2px;font-size:13px;font-weight:500;}
+.toolcard p{margin:0;font-size:11px;color:var(--muted);}
+.back-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;cursor:pointer;color:var(--muted);font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;}
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;padding:12px 0 4px;}
+.gauge-num{font-family:var(--font-mono);font-size:32px;font-weight:700;color:var(--accent-strong);}
+.timer-num{font-family:var(--font-mono);font-size:50px;font-weight:700;color:var(--text);text-align:center;letter-spacing:1px;}
+.chatbubble{max-width:80%;padding:9px 12px;border-radius:10px;font-size:13px;margin-bottom:8px;line-height:1.5;}
+.chat-user{background:var(--chat-user-bg);color:var(--chat-user-text);margin-left:auto;border:1px solid var(--line);}
+.chat-ai{background:var(--card);border:1px solid var(--line);color:var(--text);}
+.chat-input-row{position:absolute;bottom:14px;left:20px;right:20px;display:flex;gap:6px;background:var(--phone-bg);padding-top:6px;}
+.course-row{display:flex;gap:6px;align-items:center;margin-bottom:8px;}
+.course-row input[type=text]{flex:2;}
+.course-row input[type=number]{flex:1;}
+.course-row select{flex:1;}
+.del-x{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:4px;}
+.switch{position:relative;width:44px;height:24px;flex-shrink:0;}
+.switch input{opacity:0;width:0;height:0;}
+.switch-track{position:absolute;inset:0;background:var(--line);border-radius:20px;transition:.15s;cursor:pointer;}
+.switch-track:before{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.15s;}
+.switch input:checked + .switch-track{background:var(--accent-strong);}
+.switch input:checked + .switch-track:before{transform:translateX(20px);}
+.theme-option{display:flex;align-items:center;justify-content:space-between;padding:12px 0;}
+.theme-option:not(:last-child){border-bottom:1px solid var(--line);}
+.theme-row{display:flex;align-items:center;gap:12px;padding:10px 0;}
+.theme-row:not(:last-child){border-bottom:1px solid var(--line);}
+.theme-swatch{width:34px;height:34px;border-radius:9px;flex-shrink:0;border:1px solid var(--line);}
+.theme-row-info{flex:1;min-width:0;}
+.theme-row-info h3{margin:0;font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:5px;}
+.theme-row-info p{margin:2px 0 0;}
+.lock-icon{font-size:10px;opacity:.7;}
+.theme-check{color:var(--accent-strong);font-size:16px;font-weight:700;flex-shrink:0;}
+.buy-btn{font-size:11px;padding:5px 10px;white-space:nowrap;flex-shrink:0;}
+.onboarding{
+position:absolute;inset:0;z-index:50;background:var(--phone-bg);
+display:flex;align-items:center;justify-content:center;padding:30px;
+}
+.onboarding-card{width:100%;text-align:center;}
+.onboarding-card h2{font-family:var(--font-display);font-size:24px;margin:0 0 4px;color:var(--text);}
+.onboarding-card input{text-align:center;margin-bottom:4px;}
+/* Custom date/time picker — replaces the native Android calendar/clock
+   dialogs, which are drawn by the OS and can't be themed at all, with a
+   fully in-app, theme-matched picker. */
+.picker-field{
+  width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;
+  font-family:var(--font-body);font-size:12.5px;background:var(--card-2);color:var(--muted);
+  text-align:left;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:6px;
+}
+.picker-field.has-value{color:var(--text);}
+.picker-field-icon{opacity:.6;font-size:12px;flex-shrink:0;}
+.picker-overlay{
+  position:absolute;inset:0;z-index:60;background:rgba(0,0,0,.55);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+}
+.picker-sheet{
+  width:100%;max-width:300px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius-card);padding:14px;box-shadow:var(--phone-shadow);
+}
+.picker-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.picker-header span{font-family:var(--font-body);font-weight:600;font-size:13px;color:var(--text);}
+.picker-nav{
+  background:var(--card-2);border:1px solid var(--line);color:var(--text);border-radius:6px;
+  width:28px;height:28px;font-size:15px;cursor:pointer;
+}
+.picker-weekdays{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:4px;}
+.picker-weekdays span{font-size:10px;color:var(--muted);font-weight:600;}
+.picker-daygrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.picker-day{
+  aspect-ratio:1;border:none;background:none;border-radius:50%;color:var(--text);
+  font-family:var(--font-body);font-size:12px;cursor:pointer;
+}
+.picker-day.empty-cell{cursor:default;}
+.picker-day.today{box-shadow:inset 0 0 0 1.5px var(--line);}
+.picker-day.selected{background:var(--accent-btn-bg);color:var(--accent-btn-text);font-weight:700;}
+.picker-time-columns{display:flex;gap:8px;justify-content:center;}
+.picker-col{
+  display:flex;flex-direction:column;gap:3px;max-height:170px;overflow-y:auto;
+  padding:2px;scroll-behavior:smooth;
+}
+.picker-time-opt{
+  background:none;border:none;color:var(--text);font-family:var(--font-mono);font-size:13px;
+  padding:6px 12px;border-radius:6px;cursor:pointer;text-align:center;
+}
+.picker-time-opt.selected{background:var(--accent-btn-bg);color:var(--accent-btn-text);font-weight:700;}
+.picker-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:10px;}
+.picker-text-btn{font-size:12px;color:var(--muted);cursor:pointer;}
+</style>
+<!--
+  These used to load from a CDN ("@latest") at runtime. That meant:
+  (1) local notifications silently stopped working with no internet
+      connection, which defeats the point of a *local* notification, and
+  (2) the JS bridge version could drift out of sync with whatever native
+      plugin version got baked into the APK at build time.
+  They're now vendored into www/vendor/ by `npm run sync:vendor` (see
+  scripts/sync-vendor.js), which the CI workflow runs right after
+  `npm install` — so the JS here always matches the native code that gets
+  built into the app, and it all works fully offline.
+-->
+<script src="vendor/capacitor.js"></script>
+<script src="vendor/local-notifications.js"></script>
+</head>
+<body data-theme="light">
+<div class="phone">
+<div class="onboarding" id="onboarding">
+<div class="onboarding-card">
+<h2>Welcome</h2>
+<p class="small muted" style="margin:0 0 16px;">What should we call you?</p>
+<input type="text" id="onboardingName" placeholder="Your name" autofocus>
+<button class="fab-btn" style="width:100%;margin-top:12px;" onclick="submitName()">Get started</button>
+</div>
+</div>
+<div class="status"></div>
+<div class="topbar">
+<button class="settings-gear" onclick="openSettings()" aria-label="Settings"><span aria-hidden="true">&#9881;</span></button>
+<h1 id="screenTitle">Good morning</h1>
+<p id="screenSub"></p>
+</div>
+<div class="screen" id="screen-home">
+<div class="section-label">Today</div>
+<div id="homeToday"></div>
+<div class="section-label">Due soon</div>
+<div id="homeDue"></div>
+<div class="section-label">Quick tools</div>
+<div class="toolgrid">
+<div class="toolcard" onclick="openTool('gpa')"><span aria-hidden="true">&#128202;</span><h3>GPA</h3><p><span id="homeGpa">0.00</span> current</p></div>
+<div class="toolcard" onclick="openTool('timer')"><span aria-hidden="true">&#9201;</span><h3>Study timer</h3><p id="homeTimer">Start a session</p></div>
+</div>
+</div>
+<div class="screen hidden" id="screen-schedule">
+<div id="scheduleList"></div>
+<div class="card">
+<p class="small muted" id="scheduleFormLabel" style="margin:0 0 8px;font-weight:500;">Add a class</p>
+<input type="text" id="classNameInput" placeholder="Class name" style="margin-bottom:6px;">
+<div style="display:flex;gap:6px;margin-bottom:6px;">
+<select id="classDayInput" style="flex:1;">
+<option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option>
+</select>
+<input type="hidden" id="classTimeInput">
+<button type="button" class="picker-field" id="classTimeDisplay" data-placeholder="Time" onclick="openTimePicker('classTimeInput','classTimeDisplay')" style="flex:1;"><span>Time</span><span class="picker-field-icon">&#128337;</span></button>
+</div>
+<input type="text" id="classLocationInput" placeholder="Building, room" style="margin-bottom:8px;">
+<div class="row">
+<span class="small" id="cancelEditClass" onclick="cancelEditClass()" style="cursor:pointer;color:var(--muted);display:none;">Cancel</span>
+<span></span>
+<button class="fab-btn" id="classSubmitBtn" onclick="submitClass()">Add class</button>
+</div>
+</div>
+</div>
+<div class="screen hidden" id="screen-tasks">
+<div id="taskList"></div>
+<div class="card">
+<input type="text" id="newTaskInput" placeholder="Assignment title" style="margin-bottom:6px;">
+<input type="text" id="newTaskCourse" placeholder="Course (optional)" style="margin-bottom:6px;">
+<div style="display:flex;gap:6px;margin-bottom:8px;">
+<input type="hidden" id="newTaskDue">
+<button type="button" class="picker-field" id="newTaskDueDisplay" data-placeholder="Due date" onclick="openDatePicker('newTaskDue','newTaskDueDisplay')" style="flex:1;"><span>Due date</span><span class="picker-field-icon">&#128197;</span></button>
+<input type="hidden" id="newTaskDueTime">
+<button type="button" class="picker-field" id="newTaskDueTimeDisplay" data-placeholder="Due time" onclick="openTimePicker('newTaskDueTime','newTaskDueTimeDisplay')" style="flex:1;"><span>Due time</span><span class="picker-field-icon">&#128337;</span></button>
+</div>
+<p class="small muted" style="margin:-4px 0 8px;">Add a due time to get a reminder 10 minutes before — otherwise you'll get one at 9am that day.</p>
+<button class="fab-btn" style="width:100%;" onclick="addTask()">Add assignment</button>
+</div>
+</div>
+<div class="screen hidden" id="screen-notes">
+<div class="row" style="margin-bottom:8px;">
+<span></span>
+<span class="small" onclick="openArchive()" style="cursor:pointer;color:var(--accent-strong);font-weight:500;">View archived (<span id="archiveCount">0</span>)</span>
+</div>
+<div id="noteList"></div>
+<div class="card">
+<input type="text" id="newNoteTitle" placeholder="Note title" style="margin-bottom:6px;">
+<textarea id="newNoteBody" rows="3" placeholder="Write a quick note..."></textarea>
+<div style="margin-top:8px;text-align:right;"><button class="fab-btn" onclick="addNote()">Save note</button></div>
+</div>
+</div>
+<div class="screen hidden" id="screen-archive">
+<div class="back-row" onclick="switchTab('notes')">&#8592; Notes</div>
+<div id="archiveList"></div>
+</div>
+<div class="screen hidden" id="screen-tools">
+<div class="toolgrid">
+<div class="toolcard" onclick="openTool('gpa')"><span aria-hidden="true">&#128202;</span><h3>GPA calculator</h3><p>Track your average</p></div>
+<div class="toolcard" onclick="openTool('timer')"><span aria-hidden="true">&#9201;</span><h3>Study timer</h3><p>Focus sessions</p></div>
+<div class="toolcard" onclick="openTool('reminders')"><span aria-hidden="true">&#128276;</span><h3>Reminders</h3><p>Never miss a deadline</p></div>
+</div>
+</div>
+<div class="screen hidden" id="screen-gpa">
+<div class="back-row" onclick="openTool('tools')"><span aria-hidden="true">&#8592;</span> Tools</div>
+<div class="card gauge-wrap">
+<p class="small muted" style="margin:0 0 4px;">Current GPA</p>
+<div class="gauge-num" id="gpaResult">0.00</div>
+</div>
+<div id="courseRows"></div>
+<button class="ghost-btn" onclick="addCourseRow()" style="width:100%;margin-bottom:10px;">+ Add course</button>
+</div>
+<div class="screen hidden" id="screen-timer">
+<div class="back-row" onclick="openTool('tools')"><span aria-hidden="true">&#8592;</span> Tools</div>
+<div class="card" style="padding:26px 16px;">
+<p class="small muted" style="text-align:center;margin:0 0 8px;" id="timerLabel">Focus session</p>
+<div class="timer-num" id="timerDisplay">25:00</div>
+<div style="display:flex;gap:8px;justify-content:center;margin-top:18px;">
+<button class="ghost-btn" onclick="setTimer(25)">25 min</button>
+<button class="ghost-btn" onclick="setTimer(15)">15 min</button>
+<button class="ghost-btn" onclick="setTimer(5)">5 min</button>
+</div>
+<div style="display:flex;gap:6px;justify-content:center;margin-top:10px;">
+  <input type="number" id="customMins" placeholder="Min" min="1" max="180" style="width:80px;text-align:center;">
+  <button class="ghost-btn" onclick="setCustomTimer()">Set custom</button>
+</div>
+<div style="display:flex;gap:8px;justify-content:center;margin-top:14px;">
+<button class="fab-btn" id="timerToggle" onclick="toggleTimer()">Start</button>
+<button class="ghost-btn" onclick="resetTimer()">Reset</button>
+</div>
+</div>
+</div>
+<div class="screen hidden" id="screen-reminders">
+<div class="back-row" onclick="openTool('tools')"><span aria-hidden="true">&#8592;</span> Tools</div>
+<div id="reminderList"></div>
+<div class="card" style="display:flex;gap:6px;">
+<input type="text" id="newReminderInput" placeholder="Remind me to...">
+<button class="fab-btn" onclick="addReminder()">Add</button>
+</div>
+</div>
+<div class="screen hidden" id="screen-settings">
+<div class="back-row" onclick="closeSettings()"><span aria-hidden="true">&#8592;</span> Back</div>
+<div class="section-label">Appearance</div>
+<div class="card" id="themeList" style="padding:4px 15px;"></div>
+<div class="section-label">Notifications</div>
+<div class="card">
+<div class="theme-option">
+<div>
+<h3 style="margin:0;">Reminders &amp; alerts</h3>
+<p class="small muted" style="margin:2px 0 0;" id="notifStatusText">Classes, due dates and timer alerts</p>
+</div>
+<label class="switch">
+<input type="checkbox" id="notifToggle" onchange="setNotifications(this.checked)">
+<span class="switch-track"></span>
+</label>
+</div>
+</div>
+<div class="section-label">Account</div>
+<div class="card">
+<p class="small" id="settingsName" style="margin:0 0 4px;font-weight:500;">Student</p>
+</div>
+<div class="section-label">About</div>
+<div class="card">
+<p class="small muted" style="margin:0;">Campus Companion, prototype v0.1</p>
+</div>
+</div>
+<div class="navbar">
+<button class="navbtn active" data-tab="home" onclick="switchTab('home')">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
+Home
+</button>
+<button class="navbtn" data-tab="schedule" onclick="switchTab('schedule')">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 3v4"/><path d="M16 3v4"/></svg>
+Schedule
+</button>
+<button class="navbtn" data-tab="tasks" onclick="switchTab('tasks')">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 12l2.5 2.5L16 9"/></svg>
+Tasks
+</button>
+<button class="navbtn" data-tab="notes" onclick="switchTab('notes')">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>
+Notes
+</button>
+<button class="navbtn" data-tab="tools" onclick="switchTab('tools')">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg>
+Tools
+</button>
+</div>
+<div class="picker-overlay hidden" id="pickerOverlay" onclick="closePicker()">
+<div class="picker-sheet" id="pickerSheet" onclick="event.stopPropagation()"></div>
+</div>
+</div>
+<script>
+// ---------- STORAGE ----------
+function saveData(){
+  localStorage.setItem('cc_data', JSON.stringify({
+    userName, classes, classId, tasks, taskId, notes, noteId,
+    courses, courseId, reminders, reminderId,
+    theme: document.body.getAttribute('data-theme'),
+    purchasedThemes,
+    notificationsEnabled
+  }));
+}
+function loadData(){
+  try { return JSON.parse(localStorage.getItem('cc_data')); } catch(e){ return null; }
+}
+// ---------- Notifications ----------
+let notificationsEnabled = false;
+const TIMER_NOTIF_ID = 900000;      // the study timer's one-shot completion alert
+const CLASS_NOTIF_BASE = 800000;    // class reminders use 800000 + class.id, so they can
+                                     // never collide with a task's own id (task notifications
+                                     // just use the raw task.id)
+const TIMER_CHANNEL_ID = 'study-timer-alarm';
+let alarmChannelReady = false;
+function getLN(){
+  return (window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.LocalNotifications) || null;
+}
+function isValidTimeStr(s){ return /^([01]?\d|2[0-3]):([0-5]\d)$/.test(s || ''); }
+// Shared 24h "HH:MM" -> "H:MM AM/PM" formatter, used for both class times and
+// optional assignment due-times.
+function formatTime12(hhmm){
+  if(!isValidTimeStr(hhmm)) return '';
+  const [h,m] = hhmm.split(':').map(Number);
+  const period = h < 12 ? 'AM' : 'PM';
+  const h12 = ((h + 11) % 12) + 1;
+  return h12 + ':' + String(m).padStart(2,'0') + ' ' + period;
+}
+// Capacitor's weekday trigger uses Sunday=1 ... Saturday=7 (same as JS
+// Date#getDay() + 1).
+function dayNameToWeekday(day){
+  const idx = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'].indexOf(day);
+  return idx >= 0 ? idx + 1 : null;
+}
+// A louder, harder-to-miss channel just for the study timer, separate from
+// the normal (default-importance, silent-if-DND) channel everything else
+// uses. Android locks a channel's importance/sound once created, so if this
+// ever needs to change later it should get a new TIMER_CHANNEL_ID rather
+// than editing this one in place.
+function ensureAlarmChannel(){
+  const ln = getLN();
+  if(!ln || alarmChannelReady) return;
+  ln.createChannel({
+    id: TIMER_CHANNEL_ID,
+    name: 'Study timer alarm',
+    description: 'Plays when a focus session ends',
+    importance: 5,
+    sound: 'study_alarm',
+    vibration: true,
+    visibility: 1
+  }).then(()=>{ alarmChannelReady = true; }).catch(()=>{});
+}
+async function setNotifications(checked){
+  const ln = getLN();
+  if(!checked){
+    notificationsEnabled = false;
+    if(ln){
+      // Cancels everything this app can schedule — the timer, every undone
+      // assignment's due reminder, and every class's weekly reminder — so
+      // turning the toggle off actually stops all of it, not just the timer.
+      const ids = [
+        { id: TIMER_NOTIF_ID },
+        ...tasks.filter(t=>!t.done).map(t=>({ id: t.id })),
+        ...classes.map(c=>({ id: CLASS_NOTIF_BASE + c.id }))
+      ];
+      ln.cancel({ notifications: ids }).catch(()=>{});
+    }
+    updateNotifStatusText();
+    saveData();
+    return;
+  }
+  if(!ln){
+    notificationsEnabled = true; // no native bridge (e.g. browser preview); just remember the preference
+    updateNotifStatusText();
+    saveData();
+    return;
+  }
+  try {
+    const perm = await ln.requestPermissions();
+    if(perm.display === 'granted'){
+      notificationsEnabled = true;
+      ensureAlarmChannel();
+      // Schedule everything that's already on the books right away, rather
+      // than waiting for the next full app restart.
+      tasks.filter(t=>!t.done).forEach(scheduleTaskNotification);
+      classes.forEach(scheduleClassNotification);
+    } else {
+      notificationsEnabled = false;
+      document.getElementById('notifToggle').checked = false;
+    }
+  } catch(e){
+    notificationsEnabled = false;
+    document.getElementById('notifToggle').checked = false;
+  }
+  updateNotifStatusText();
+  saveData();
+}
+function updateNotifStatusText(){
+  const el = document.getElementById('notifStatusText');
+  if(el) el.textContent = notificationsEnabled ? 'On — classes, due dates and timer alerts' : 'Classes, due dates and timer alerts';
+}
+// NOTE on the timer "alarm": a local notification's sound plays once when it
+// posts — Android has no built-in way to make a plain notification ring on
+// a loop like a real alarm clock without a foreground service holding a
+// wake lock, which is well beyond what this plugin (or a no-custom-native-
+// code app) supports. This gets as close as that ceiling allows: a
+// dedicated max-importance channel, a distinct louder sound, strong
+// vibration, and `ongoing` so it can't be swiped away by accident.
+function scheduleTimerNotification(seconds){
+  const ln = getLN();
+  if(!ln || !notificationsEnabled) return;
+  ensureAlarmChannel();
+  ln.cancel({ notifications: [{ id: TIMER_NOTIF_ID }] }).catch(()=>{});
+  ln.schedule({ notifications: [{
+    id: TIMER_NOTIF_ID,
+    title: "Time's up!",
+    body: 'Your focus session just ended — nice work.',
+    channelId: TIMER_CHANNEL_ID,
+    sound: 'study_alarm',
+    ongoing: true,
+    schedule: { at: new Date(Date.now() + seconds * 1000) }
+  }]}).catch(()=>{});
+}
+function cancelTimerNotification(){
+  const ln = getLN();
+  if(!ln) return;
+  ln.cancel({ notifications: [{ id: TIMER_NOTIF_ID }] }).catch(()=>{});
+}
+function scheduleTaskNotification(task){
+  const ln = getLN();
+  if(!ln || !notificationsEnabled || !task.dueRaw) return;
+  const [y,m,d] = task.dueRaw.split('-').map(Number);
+  let at, title;
+  if(isValidTimeStr(task.dueTimeRaw)){
+    const [h,mi] = task.dueTimeRaw.split(':').map(Number);
+    at = new Date(y, m-1, d, h, mi, 0);
+    at = new Date(at.getTime() - 10*60*1000); // 10 minutes before the due time
+    title = 'Due in 10 minutes';
+  } else {
+    at = new Date(y, m-1, d, 9, 0, 0); // no due time given — keep the old flat 9am reminder
+    title = 'Assignment due today';
+  }
+  if(at.getTime() <= Date.now()) return;
+  ln.schedule({ notifications: [{
+    id: task.id,
+    title,
+    body: task.title + (task.course && task.course !== 'General' ? ' — ' + task.course : ''),
+    schedule: { at }
+  }]}).catch(()=>{});
+}
+function cancelTaskNotification(taskId){
+  const ln = getLN();
+  if(!ln) return;
+  ln.cancel({ notifications: [{ id: taskId }] }).catch(()=>{});
+}
+// Classes repeat weekly, so this uses Capacitor's weekday+hour+minute trigger
+// (a "cron-like" recurring schedule) instead of a one-off date — set once,
+// it keeps firing every week without the app needing to reschedule it.
+function scheduleClassNotification(c){
+  const ln = getLN();
+  if(!ln || !notificationsEnabled || !isValidTimeStr(c.time)) return;
+  let weekday = dayNameToWeekday(c.day);
+  if(!weekday) return;
+  const [h,m] = c.time.split(':').map(Number);
+  let totalMin = h*60 + m - 10;
+  if(totalMin < 0){
+    totalMin += 24*60;
+    weekday = weekday === 1 ? 7 : weekday - 1; // reminder lands on the previous day
+  }
+  const rh = Math.floor(totalMin/60), rm = totalMin%60;
+  ln.schedule({ notifications: [{
+    id: CLASS_NOTIF_BASE + c.id,
+    title: 'Class starting soon',
+    body: c.name + ' in 10 minutes' + (c.location ? ' — ' + c.location : ''),
+    schedule: { on: { weekday, hour: rh, minute: rm }, allowWhileIdle: true }
+  }]}).catch(()=>{});
+}
+function cancelClassNotification(id){
+  const ln = getLN();
+  if(!ln) return;
+  ln.cancel({ notifications: [{ id: CLASS_NOTIF_BASE + id }] }).catch(()=>{});
+}
+const titles = {
+  home:['Good morning',''], schedule:['Your schedule',''],
+  tasks:['Assignments','Stay on top of deadlines'],
+  notes:['Class notes','Organized by you'],
+  tools:['Tools','GPA, timer, reminders and more'],
+  gpa:['GPA calculator','Add courses to see your average'],
+  timer:['Study timer','Pick a focus block and go'],
+  reminders:['Reminders','Quick nudges, no calendar needed']
+};
+function greeting(){
+  const h = new Date().getHours();
+  if(h < 12) return 'Good morning';
+  if(h < 18) return 'Good afternoon';
+  return 'Good evening';
+}
+
+let userName = '';
+function setHeader(key){
+  const base = key==='home' ? greeting() : titles[key][0];
+  const title = key==='home' && userName ? base+', '+userName : base;
+  document.getElementById('screenTitle').textContent = title;
+  if(key==='home') document.getElementById('screenSub').textContent = homeSubtitle();
+  else if(key==='schedule') document.getElementById('screenSub').textContent = '';
+  else document.getElementById('screenSub').textContent = titles[key][1];
+}
+function homeSubtitle(){
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  const todayName=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()];
+  const count=classes.filter(c=>c.day===todayName).length;
+  return dateStr+' · '+count+' '+(count===1?'class':'classes')+' today';
+}
+function submitName(){
+  const v=document.getElementById('onboardingName').value.trim();
+  userName=v||'Student';
+  document.getElementById('onboarding').classList.add('hidden');
+  document.getElementById('settingsName').textContent=userName;
+  setHeader('home'); saveData();
+}
+document.getElementById('onboardingName').addEventListener('keydown',e=>{ if(e.key==='Enter') submitName(); });
+function switchTab(tab){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+  document.getElementById('screen-'+tab).classList.remove('hidden');
+  document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('active'));
+  const btn=document.querySelector('.navbtn[data-tab="'+tab+'"]'); if(btn) btn.classList.add('active');
+  setHeader(tab);
+}
+let lastTab='home';
+function openSettings(){
+  lastTab=document.querySelector('.navbtn.active')?document.querySelector('.navbtn.active').dataset.tab:'home';
+  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+  document.getElementById('screen-settings').classList.remove('hidden');
+  document.getElementById('screenTitle').textContent='Settings';
+  document.getElementById('screenSub').textContent='Appearance, account, about';
+  renderThemeList();
+}
+function closeSettings(){ switchTab(lastTab); }
+// ---------- Themes ----------
+// "free" themes are always available. The rest are locked behind
+// purchaseTheme() below, which is currently a MOCK purchase (see the big
+// comment on that function) so the unlock flow can be built and tried out
+// end-to-end before real billing is wired up.
+const THEMES=[
+  {id:'light',name:'Light',desc:'Clean & bright',free:true,swatch:'linear-gradient(135deg,#FAF6ED 50%,#1F2A44 50%)'},
+  {id:'dark',name:'Dark',desc:'Terminal-cozy, low light',free:true,swatch:'linear-gradient(135deg,#141414 50%,#6EC9B0 50%)'},
+  {id:'sunset',name:'Sunset',desc:'Warm oranges & rose',free:false,price:'$0.99',swatch:'linear-gradient(135deg,#FCEEDD 35%,#E2793D 100%)'},
+  {id:'dusk',name:'Dusk',desc:'Sunset\'s warm glow, after dark',free:false,price:'$0.99',swatch:'linear-gradient(135deg,#1F1512 35%,#E2793D 100%)'},
+  {id:'ocean',name:'Ocean',desc:'Cool blues & teal',free:false,price:'$0.99',swatch:'linear-gradient(135deg,#EAF3F5 35%,#1B7A8C 100%)'},
+  {id:'midnightwaves',name:'Midnight Waves',desc:'Ocean\'s cool teal, after dark',free:false,price:'$0.99',swatch:'linear-gradient(135deg,#0B1A1D 35%,#2FA8BE 100%)'},
+  {id:'forest',name:'Forest',desc:'Deep greens, moody',free:false,price:'$1.49',swatch:'linear-gradient(135deg,#111813 35%,#7FBF6C 100%)'},
+  {id:'grunge',name:'Battle Jacket',desc:'Spray-stencil stars, band-tee red & black',free:false,price:'$1.49',swatch:'linear-gradient(135deg,#17140F 30%,#C8202E 65%,#EDE7D9 100%)'},
+  {id:'nevermore',name:'Nevermore',desc:'Gothic scrapbook, ravens & gilt ink',free:false,price:'$1.99',swatch:'linear-gradient(135deg,#0C0B09 30%,#3A332A 60%,#B8A06B 100%)'}
+];
+let purchasedThemes=[];
+function isThemeUnlocked(id){
+  const t=THEMES.find(x=>x.id===id);
+  return !t || t.free || purchasedThemes.includes(id);
+}
+function setTheme(theme){
+  if(!isThemeUnlocked(theme)) return; // guard: never apply a locked theme directly
+  document.body.setAttribute('data-theme',theme);
+  renderThemeList();
+  saveData();
+}
+// ---- MOCK IN-APP PURCHASE ----
+// This unlocks a theme locally, for free, with no real money involved. It
+// exists so the "buy a theme" UI/UX can be finished and tested now.
+// TODO before publishing with real paid themes: replace unlockThemeLocally()
+// below with an actual Google Play Billing purchase (e.g. via a Capacitor
+// billing plugin), matching one Play Console in-app product SKU per theme
+// id, and only call it once Play Billing confirms the purchase.
+function purchaseTheme(id){
+  const t=THEMES.find(x=>x.id===id);
+  if(!t || t.free || isThemeUnlocked(id)) return;
+  unlockThemeLocally(id);
+  setTheme(id);
+}
+function unlockThemeLocally(id){
+  if(!purchasedThemes.includes(id)) purchasedThemes.push(id);
+  saveData();
+}
+function renderThemeList(){
+  const wrap=document.getElementById('themeList'); if(!wrap) return;
+  const current=document.body.getAttribute('data-theme');
+  wrap.innerHTML=THEMES.map(t=>{
+    const unlocked=isThemeUnlocked(t.id);
+    const active=current===t.id;
+    const right=!unlocked
+      ? `<button class="ghost-btn buy-btn" onclick="event.stopPropagation();purchaseTheme('${t.id}')">${t.price}</button>`
+      : (active ? '<span class="theme-check">&#10003;</span>' : '');
+    return `<div class="theme-row" ${unlocked?`onclick="setTheme('${t.id}')" style="cursor:pointer;"`:''}>
+      <div class="theme-swatch" style="background:${t.swatch};"></div>
+      <div class="theme-row-info">
+        <h3>${t.name}${!unlocked?' <span class="lock-icon">&#128274;</span>':''}</h3>
+        <p class="small muted">${t.desc}</p>
+      </div>
+      ${right}
+    </div>`;
+  }).join('');
+}
+function openTool(tool){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+  document.getElementById('screen-'+tool).classList.remove('hidden');
+  document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('active'));
+  const btn=document.querySelector('.navbtn[data-tab="tools"]'); if(btn) btn.classList.add('active');
+  setHeader(tool);
+}
+// ---------- Custom date/time picker ----------
+// Every date/time field in the app is a hidden <input> (id passed in below)
+// holding the real value in the same YYYY-MM-DD / HH:MM format the rest of
+// the app already expects, plus a visible button that opens this themed
+// picker. Nothing downstream (submitClass, addTask, scheduling, etc.) had
+// to change what it reads — it still just reads hiddenInput.value.
+let pickerTargetHiddenId = null, pickerTargetDisplayId = null, pickerType = null;
+let pickerViewYear, pickerViewMonth;
+let pickerPendingH, pickerPendingM, pickerPendingAmPm;
+const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+function isoDate(y,m,d){ return y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0'); }
+function updateFieldDisplay(hiddenId, displayId, type){
+  const raw = document.getElementById(hiddenId).value;
+  const el = document.getElementById(displayId);
+  if(!el) return;
+  const label = el.querySelector('span');
+  if(!raw){
+    label.textContent = el.dataset.placeholder;
+    el.classList.remove('has-value');
+  } else {
+    label.textContent = type === 'time' ? formatTime12(raw) : formatDueDate(raw);
+    el.classList.add('has-value');
+  }
+}
+function openDatePicker(hiddenId, displayId){
+  pickerType = 'date'; pickerTargetHiddenId = hiddenId; pickerTargetDisplayId = displayId;
+  const raw = document.getElementById(hiddenId).value;
+  const today = new Date();
+  if(raw){ const [y,m] = raw.split('-').map(Number); pickerViewYear = y; pickerViewMonth = m-1; }
+  else { pickerViewYear = today.getFullYear(); pickerViewMonth = today.getMonth(); }
+  renderDatePicker();
+  document.getElementById('pickerOverlay').classList.remove('hidden');
+}
+function renderDatePicker(){
+  const raw = document.getElementById(pickerTargetHiddenId).value;
+  const todayIso = isoDate(new Date().getFullYear(), new Date().getMonth()+1, new Date().getDate());
+  const first = new Date(pickerViewYear, pickerViewMonth, 1);
+  const startDow = first.getDay();
+  const daysInMonth = new Date(pickerViewYear, pickerViewMonth+1, 0).getDate();
+  let cells = '';
+  for(let i=0;i<startDow;i++) cells += '<span class="picker-day empty-cell"></span>';
+  for(let d=1; d<=daysInMonth; d++){
+    const iso = isoDate(pickerViewYear, pickerViewMonth+1, d);
+    const cls = ['picker-day'];
+    if(iso === todayIso) cls.push('today');
+    if(iso === raw) cls.push('selected');
+    cells += `<button type="button" class="${cls.join(' ')}" onclick="pickerSelectDay('${iso}')">${d}</button>`;
+  }
+  document.getElementById('pickerSheet').innerHTML = `
+    <div class="picker-header">
+      <button type="button" class="picker-nav" onclick="pickerChangeMonth(-1)" aria-label="Previous month">&#8249;</button>
+      <span>${MONTH_NAMES[pickerViewMonth]} ${pickerViewYear}</span>
+      <button type="button" class="picker-nav" onclick="pickerChangeMonth(1)" aria-label="Next month">&#8250;</button>
+    </div>
+    <div class="picker-weekdays">${['S','M','T','W','T','F','S'].map(d=>'<span>'+d+'</span>').join('')}</div>
+    <div class="picker-daygrid">${cells}</div>
+    <div class="picker-footer">
+      <span class="picker-text-btn" onclick="pickerClear()">Clear</span>
+      <span class="picker-text-btn" onclick="closePicker()">Cancel</span>
+      <span></span>
+    </div>`;
+}
+function pickerChangeMonth(delta){
+  pickerViewMonth += delta;
+  if(pickerViewMonth < 0){ pickerViewMonth = 11; pickerViewYear--; }
+  if(pickerViewMonth > 11){ pickerViewMonth = 0; pickerViewYear++; }
+  renderDatePicker();
+}
+function pickerSelectDay(iso){
+  document.getElementById(pickerTargetHiddenId).value = iso;
+  updateFieldDisplay(pickerTargetHiddenId, pickerTargetDisplayId, 'date');
+  closePicker();
+}
+function openTimePicker(hiddenId, displayId){
+  pickerType = 'time'; pickerTargetHiddenId = hiddenId; pickerTargetDisplayId = displayId;
+  const raw = document.getElementById(hiddenId).value;
+  let h24 = 9, mi = 0;
+  if(isValidTimeStr(raw)){ [h24, mi] = raw.split(':').map(Number); }
+  pickerPendingAmPm = h24 < 12 ? 'AM' : 'PM';
+  pickerPendingH = ((h24 + 11) % 12) + 1;
+  pickerPendingM = mi;
+  renderTimePicker();
+  document.getElementById('pickerOverlay').classList.remove('hidden');
+  pickerRescrollColumns();
+}
+function renderTimePicker(){
+  const hours = Array.from({length:12}, (_,i)=>i+1);
+  const mins = Array.from({length:60}, (_,i)=>i);
+  document.getElementById('pickerSheet').innerHTML = `
+    <div class="picker-header"><span>Select time</span></div>
+    <div class="picker-time-columns">
+      <div class="picker-col" id="pickerHourCol">${hours.map(h=>`<button type="button" class="picker-time-opt ${h===pickerPendingH?'selected':''}" onclick="pickerSetHour(${h})">${h}</button>`).join('')}</div>
+      <div class="picker-col" id="pickerMinCol">${mins.map(m=>`<button type="button" class="picker-time-opt ${m===pickerPendingM?'selected':''}" onclick="pickerSetMin(${m})">${String(m).padStart(2,'0')}</button>`).join('')}</div>
+      <div class="picker-col">
+        <button type="button" class="picker-time-opt ${pickerPendingAmPm==='AM'?'selected':''}" onclick="pickerSetAmPm('AM')">AM</button>
+        <button type="button" class="picker-time-opt ${pickerPendingAmPm==='PM'?'selected':''}" onclick="pickerSetAmPm('PM')">PM</button>
+      </div>
+    </div>
+    <div class="picker-footer">
+      <span class="picker-text-btn" onclick="pickerClear()">Clear</span>
+      <span class="picker-text-btn" onclick="closePicker()">Cancel</span>
+      <button type="button" class="fab-btn" onclick="pickerConfirmTime()">Set</button>
+    </div>`;
+}
+function pickerRescrollColumns(){
+  requestAnimationFrame(()=>{
+    document.querySelector('#pickerHourCol .selected')?.scrollIntoView({block:'center'});
+    document.querySelector('#pickerMinCol .selected')?.scrollIntoView({block:'center'});
+  });
+}
+function pickerSetHour(h){ pickerPendingH = h; renderTimePicker(); pickerRescrollColumns(); }
+function pickerSetMin(m){ pickerPendingM = m; renderTimePicker(); pickerRescrollColumns(); }
+function pickerSetAmPm(p){ pickerPendingAmPm = p; renderTimePicker(); pickerRescrollColumns(); }
+function pickerConfirmTime(){
+  let h24 = pickerPendingH % 12;
+  if(pickerPendingAmPm === 'PM') h24 += 12;
+  const raw = String(h24).padStart(2,'0') + ':' + String(pickerPendingM).padStart(2,'0');
+  document.getElementById(pickerTargetHiddenId).value = raw;
+  updateFieldDisplay(pickerTargetHiddenId, pickerTargetDisplayId, 'time');
+  closePicker();
+}
+function pickerClear(){
+  document.getElementById(pickerTargetHiddenId).value = '';
+  updateFieldDisplay(pickerTargetHiddenId, pickerTargetDisplayId, pickerType);
+  closePicker();
+}
+function closePicker(){
+  document.getElementById('pickerOverlay').classList.add('hidden');
+  pickerTargetHiddenId = null; pickerTargetDisplayId = null; pickerType = null;
+}
+// ---------- Schedule ----------
+const dayOrder=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+let classes=[]; let classId=1; let editingClassId=null;
+function renderSchedule(){
+  const list=document.getElementById('scheduleList'); list.innerHTML='';
+  dayOrder.forEach(day=>{
+    const dc=classes.filter(c=>c.day===day); if(dc.length===0) return;
+    const label=document.createElement('div'); label.className='section-label'; label.textContent=day; list.appendChild(label);
+    dc.forEach(c=>{
+      const card=document.createElement('div'); card.className='card';
+      card.innerHTML=`<div class="row"><h3>${c.name}</h3><div style="display:flex;align-items:center;gap:8px;">
+        <span class="tag tag-amber">${formatTime12(c.time) || c.time}</span>
+        <button class="del-x" onclick="startEditClass(${c.id})">&#9998;</button>
+        <button class="del-x" onclick="deleteClass(${c.id})">&times;</button></div></div>
+        <p class="small muted" style="margin:0;">${c.location}</p>`;
+      list.appendChild(card);
+    });
+  });
+  if(classes.length===0) list.innerHTML='<p class="small muted" style="text-align:center;margin-top:20px;">No classes yet. Add your first one below.</p>';
+  renderHomeToday();
+  const sub=document.getElementById('screenSub');
+  if(sub && !document.getElementById('screen-home').classList.contains('hidden')) sub.textContent=homeSubtitle();
+}
+function renderHomeToday(){
+  const list=document.getElementById('homeToday'); if(!list) return;
+  const todayName=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
+  const t=classes.filter(c=>c.day===todayName);
+  if(t.length===0){ list.innerHTML='<p class="small muted" style="margin:0 0 4px;">No classes scheduled today.</p>'; return; }
+  list.innerHTML=t.map(c=>`<div class="card"><div class="row"><h3>${c.name}</h3><span class="tag tag-amber">${formatTime12(c.time) || c.time}</span></div><p class="small muted" style="margin:0;">${c.location}</p></div>`).join('');
+}
+function submitClass(){
+  const name=document.getElementById('classNameInput').value.trim();
+  const day=document.getElementById('classDayInput').value;
+  const time=document.getElementById('classTimeInput').value.trim();
+  const location=document.getElementById('classLocationInput').value.trim();
+  if(!name) return;
+  if(editingClassId){
+    cancelClassNotification(editingClassId); // day/time may have changed, so re-schedule from scratch
+    classes=classes.map(c=>c.id===editingClassId?{...c,name,day,time,location}:c);
+    scheduleClassNotification(classes.find(c=>c.id===editingClassId));
+    cancelEditClass();
+  } else {
+    const newClass={id:classId++,name,day,time,location};
+    classes.push(newClass);
+    scheduleClassNotification(newClass);
+  }
+  document.getElementById('classNameInput').value=''; document.getElementById('classTimeInput').value=''; document.getElementById('classLocationInput').value='';
+  updateFieldDisplay('classTimeInput','classTimeDisplay','time');
+  renderSchedule(); saveData();
+}
+function startEditClass(id){
+  const c=classes.find(c=>c.id===id); if(!c) return;
+  editingClassId=id;
+  document.getElementById('classNameInput').value=c.name;
+  document.getElementById('classDayInput').value=c.day;
+  document.getElementById('classTimeInput').value=c.time;
+  updateFieldDisplay('classTimeInput','classTimeDisplay','time');
+  document.getElementById('classLocationInput').value=c.location;
+  document.getElementById('scheduleFormLabel').textContent='Edit class';
+  document.getElementById('classSubmitBtn').textContent='Save changes';
+  document.getElementById('cancelEditClass').style.display='inline';
+}
+function cancelEditClass(){
+  editingClassId=null;
+  document.getElementById('classNameInput').value=''; document.getElementById('classTimeInput').value=''; document.getElementById('classLocationInput').value='';
+  updateFieldDisplay('classTimeInput','classTimeDisplay','time');
+  document.getElementById('scheduleFormLabel').textContent='Add a class';
+  document.getElementById('classSubmitBtn').textContent='Add class';
+  document.getElementById('cancelEditClass').style.display='none';
+}
+function deleteClass(id){ classes=classes.filter(c=>c.id!==id); if(editingClassId===id) cancelEditClass(); renderSchedule(); saveData(); cancelClassNotification(id); }
+// ---------- Tasks ----------
+let tasks=[]; let taskId=1;
+function renderTasks(){
+  const list=document.getElementById('taskList'); list.innerHTML='';
+  if(tasks.length===0) list.innerHTML='<p class="small muted" style="text-align:center;margin-top:12px;">No assignments yet. Add one below.</p>';
+  tasks.forEach(t=>{
+    const card=document.createElement('div'); card.className='card';
+    card.innerHTML=`<div class="row" style="gap:10px;"><div class="row" style="gap:10px;flex:1;">
+      <div class="checkcircle ${t.done?'done':''}" onclick="toggleTask(${t.id})">${t.done?'&#10003;':''}</div>
+      <div><div class="task-title ${t.done?'done':''}" style="font-size:14px;font-weight:500;">${t.title}</div>
+      <div class="small muted">${t.course}</div></div></div>
+      <div style="display:flex;align-items:center;gap:6px;">
+      <span class="tag ${t.done?'tag-sage':'tag-coral'}">${t.done?'Done':t.due}</span>
+      <button class="del-x" onclick="removeTask(${t.id})">&times;</button></div></div>`;
+    list.appendChild(card);
+  });
+  renderHomeDue();
+}
+function renderHomeDue(){
+  const list=document.getElementById('homeDue'); if(!list) return;
+  const up=tasks.filter(t=>!t.done)
+    .sort((a,b)=>{
+      if(!a.dueRaw) return 1;
+      if(!b.dueRaw) return -1;
+      return a.dueRaw.localeCompare(b.dueRaw);
+    })
+    .slice(0,3);
+  if(up.length===0){ list.innerHTML='<p class="small muted" style="margin:0 0 4px;">Nothing due right now.</p>'; return; }
+  list.innerHTML=up.map(t=>`<div class="card"><div class="row"><h3>${t.title}</h3><span class="tag tag-coral">${t.due}</span></div><p class="small muted" style="margin:0;">${t.course}</p></div>`).join('');
+}
+function toggleTask(id){
+  tasks=tasks.map(t=>t.id===id?{...t,done:!t.done}:t); renderTasks(); saveData();
+  const t=tasks.find(t=>t.id===id);
+  if(t){ if(t.done) cancelTaskNotification(t.id); else scheduleTaskNotification(t); }
+}
+function removeTask(id){ tasks=tasks.filter(t=>t.id!==id); renderTasks(); saveData(); cancelTaskNotification(id); }
+function formatDueDate(s){ if(!s) return 'No date'; const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+function addTask(){
+  const i=document.getElementById('newTaskInput'), ci=document.getElementById('newTaskCourse'), di=document.getElementById('newTaskDue'), ti=document.getElementById('newTaskDueTime');
+  if(!i.value.trim()) return;
+  const dueDisplay=formatDueDate(di.value) + (ti.value ? ' · ' + formatTime12(ti.value) : '');
+  const t={id:taskId++,title:i.value.trim(),course:ci.value.trim()||'General',due:dueDisplay,dueRaw:di.value||'',dueTimeRaw:ti.value||'',done:false};
+  tasks.push(t);
+  i.value=''; ci.value=''; di.value=''; ti.value='';
+  updateFieldDisplay('newTaskDue','newTaskDueDisplay','date');
+  updateFieldDisplay('newTaskDueTime','newTaskDueTimeDisplay','time');
+  renderTasks(); saveData();
+  scheduleTaskNotification(t);
+}
+// ---------- Notes ----------
+let notes=[]; let noteId=1;
+function renderNotes(){
+  const list=document.getElementById('noteList'); list.innerHTML='';
+  const active=notes.filter(n=>!n.archived);
+  if(active.length===0) list.innerHTML='<p class="small muted" style="text-align:center;margin-top:12px;">No notes yet. Add one below.</p>';
+  active.forEach(n=>{
+    const card=document.createElement('div'); card.className='card';
+    card.innerHTML=`<div class="row"><h3>${n.title}</h3><span class="small muted">${n.date}</span></div>
+      <p class="small" style="margin:2px 0 6px;color:var(--accent-strong);font-weight:500;">${n.course}</p>
+      <p class="small muted" style="margin:0 0 8px;">${n.body}</p>
+      <div style="text-align:right;"><button class="ghost-btn" onclick="archiveNote(${n.id})" style="font-size:11px;padding:5px 10px;">Archive</button></div>`;
+    list.appendChild(card);
+  });
+  const c=document.getElementById('archiveCount'); if(c) c.textContent=notes.filter(n=>n.archived).length;
+}
+function addNote(){
+  const t=document.getElementById('newNoteTitle'), b=document.getElementById('newNoteBody');
+  if(!t.value.trim()) return;
+  notes.unshift({id:noteId++,title:t.value.trim(),course:'General',body:b.value.trim()||'—',date:'Today',archived:false});
+  t.value=''; b.value=''; renderNotes(); saveData();
+}
+function archiveNote(id){ notes=notes.map(n=>n.id===id?{...n,archived:true}:n); renderNotes(); renderArchive(); saveData(); }
+function unarchiveNote(id){ notes=notes.map(n=>n.id===id?{...n,archived:false}:n); renderArchive(); renderNotes(); saveData(); }
+function deleteArchivedNote(id){ notes=notes.filter(n=>n.id!==id); renderArchive(); renderNotes(); saveData(); }
+function renderArchive(){
+  const list=document.getElementById('archiveList'); if(!list) return;
+  const arch=notes.filter(n=>n.archived); list.innerHTML='';
+  if(arch.length===0){ list.innerHTML='<p class="small muted" style="text-align:center;margin-top:20px;">No archived notes yet.</p>'; return; }
+  arch.forEach(n=>{
+    const card=document.createElement('div'); card.className='card';
+    card.innerHTML=`<div class="row"><h3>${n.title}</h3><span class="small muted">${n.date}</span></div>
+      <p class="small" style="margin:2px 0 6px;color:var(--accent-strong);font-weight:500;">${n.course}</p>
+      <p class="small muted" style="margin:0 0 8px;">${n.body}</p>
+      <div class="row"><button class="ghost-btn" onclick="unarchiveNote(${n.id})" style="font-size:11px;padding:5px 10px;">Restore</button>
+      <button class="del-x" onclick="deleteArchivedNote(${n.id})">&times;</button></div>`;
+    list.appendChild(card);
+  });
+}
+function openArchive(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+  document.getElementById('screen-archive').classList.remove('hidden');
+  document.getElementById('screenTitle').textContent='Archived notes';
+  document.getElementById('screenSub').textContent='Old notes, kept out of the way';
+  renderArchive();
+}
+// ---------- GPA ----------
+const gradePoints={'A':4,'A-':3.7,'B+':3.3,'B':3,'B-':2.7,'C+':2.3,'C':2,'C-':1.7,'D':1,'F':0};
+let courses=[]; let courseId=1;
+function renderCourses(){
+  const wrap=document.getElementById('courseRows'); wrap.innerHTML='';
+  if(courses.length===0) wrap.innerHTML='<p class="small muted" style="text-align:center;margin:8px 0 14px;">No courses yet. Add one below.</p>';
+  courses.forEach(c=>{
+    const row=document.createElement('div'); row.className='course-row';
+    const options=Object.keys(gradePoints).map(g=>`<option value="${g}" ${g===c.grade?'selected':''}>${g}</option>`).join('');
+    row.innerHTML=`<input type="text" value="${c.name}" onchange="updateCourse(${c.id},'name',this.value)">
+      <input type="number" value="${c.credits}" min="1" max="6" onchange="updateCourse(${c.id},'credits',this.value)">
+      <select onchange="updateCourse(${c.id},'grade',this.value)">${options}</select>
+      <button class="del-x" onclick="removeCourse(${c.id})">&times;</button>`;
+    wrap.appendChild(row);
+  });
+  computeGPA();
+}
+function updateCourse(id,field,value){ courses=courses.map(c=>c.id===id?{...c,[field]:field==='credits'?Number(value):value}:c); computeGPA(); saveData(); }
+function addCourseRow(){ courses.push({id:courseId++,name:'New course',credits:3,grade:'A'}); renderCourses(); saveData(); }
+function removeCourse(id){ courses=courses.filter(c=>c.id!==id); renderCourses(); saveData(); }
+function computeGPA(){
+  let tp=0,tc=0; courses.forEach(c=>{ tp+=gradePoints[c.grade]*c.credits; tc+=c.credits; });
+  const gpa=tc?(tp/tc):0;
+  document.getElementById('gpaResult').textContent=gpa.toFixed(2);
+  const h=document.getElementById('homeGpa'); if(h) h.textContent=gpa.toFixed(2);
+}
+// ---------- Timer ----------
+let timerSeconds=25*60, timerTotal=25*60, timerRunning=false, timerInterval=null;
+function formatTime(s){ return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+function renderHomeTimer(){
+  const el=document.getElementById('homeTimer'); if(!el) return;
+  if(timerRunning) el.textContent=formatTime(timerSeconds)+' remaining';
+  else if(timerSeconds<timerTotal && timerSeconds>0) el.textContent=formatTime(timerSeconds)+' paused';
+  else if(timerSeconds===0) el.textContent='Session complete';
+  else el.textContent='Start a session';
+}
+function setTimer(mins){
+  timerSeconds=mins*60; timerTotal=mins*60; timerRunning=false; clearInterval(timerInterval);
+  document.getElementById('timerToggle').textContent='Start';
+  document.getElementById('timerDisplay').textContent=formatTime(timerSeconds);
+  document.getElementById('timerLabel').textContent='Focus session';
+  renderHomeTimer();
+  cancelTimerNotification();
+}
+function setCustomTimer(){
+  const val = parseInt(document.getElementById('customMins').value, 10);
+  if(!val || val < 1) return;
+  const mins = Math.min(val, 180); // cap at 3 hours
+  setTimer(mins);
+  document.getElementById('customMins').value = '';
+}
+function toggleTimer(){
+  const btn=document.getElementById('timerToggle');
+  if(timerRunning){ timerRunning=false; clearInterval(timerInterval); btn.textContent='Start'; renderHomeTimer(); cancelTimerNotification(); }
+  else {
+    timerRunning=true; btn.textContent='Pause';
+    scheduleTimerNotification(timerSeconds);
+    timerInterval=setInterval(()=>{
+      timerSeconds--;
+      if(timerSeconds<=0){ clearInterval(timerInterval); timerRunning=false; document.getElementById('timerLabel').textContent='Session complete'; btn.textContent='Start'; timerSeconds=0; }
+      document.getElementById('timerDisplay').textContent=formatTime(timerSeconds);
+      renderHomeTimer();
+    },1000);
+  }
+  renderHomeTimer();
+}
+function resetTimer(){
+  timerSeconds=timerTotal; timerRunning=false; clearInterval(timerInterval);
+  document.getElementById('timerToggle').textContent='Start';
+  document.getElementById('timerDisplay').textContent=formatTime(timerSeconds);
+  document.getElementById('timerLabel').textContent='Focus session';
+  renderHomeTimer();
+  cancelTimerNotification();
+}
+// ---------- Reminders ----------
+let reminders=[]; let reminderId=1;
+function renderReminders(){
+  const list=document.getElementById('reminderList'); list.innerHTML='';
+  reminders.forEach(r=>{
+    const card=document.createElement('div'); card.className='card';
+    card.innerHTML=`<div class="row" style="gap:10px;"><div class="row" style="gap:10px;flex:1;">
+      <div class="checkcircle ${r.done?'done':''}" onclick="toggleReminder(${r.id})">${r.done?'&#10003;':''}</div>
+      <div class="task-title ${r.done?'done':''}" style="font-size:14px;">${r.text}</div></div>
+      <button class="del-x" onclick="removeReminder(${r.id})">&times;</button></div>`;
+    list.appendChild(card);
+  });
+}
+function toggleReminder(id){ reminders=reminders.map(r=>r.id===id?{...r,done:!r.done}:r); renderReminders(); saveData(); }
+function removeReminder(id){ reminders=reminders.filter(r=>r.id!==id); renderReminders(); saveData(); }
+function addReminder(){
+  const i=document.getElementById('newReminderInput'); if(!i.value.trim()) return;
+  reminders.push({id:reminderId++,text:i.value.trim(),done:false}); i.value=''; renderReminders(); saveData();
+}
+// ---------- INIT (load saved data) ----------
+(function init(){
+  const d=loadData();
+  if(d){
+    userName=d.userName||'';
+    classes=d.classes||[]; classId=d.classId||1;
+    tasks=d.tasks||[]; taskId=d.taskId||1;
+    notes=d.notes||[]; noteId=d.noteId||1;
+    courses=d.courses||[]; courseId=d.courseId||1;
+    reminders=d.reminders||[]; reminderId=d.reminderId||1;
+    purchasedThemes=d.purchasedThemes||[];
+    // Falls back to 'light' if the saved theme was removed in an update (e.g.
+    // a since-retired theme) or was never unlocked — otherwise data-theme
+    // would point at CSS that no longer exists and the whole UI would render
+    // unstyled, since none of these custom properties have fallback values.
+    if(d.theme && THEMES.some(t=>t.id===d.theme) && isThemeUnlocked(d.theme)){
+      document.body.setAttribute('data-theme', d.theme);
+    } else {
+      document.body.setAttribute('data-theme', 'light');
+    }
+    if(userName){
+      document.getElementById('onboarding').classList.add('hidden');
+      document.getElementById('settingsName').textContent=userName;
+    }
+    notificationsEnabled = !!d.notificationsEnabled;
+    document.getElementById('notifToggle').checked = notificationsEnabled;
+    updateNotifStatusText();
+    if(notificationsEnabled){
+      ensureAlarmChannel();
+      tasks.filter(t=>!t.done).forEach(scheduleTaskNotification);
+      classes.forEach(scheduleClassNotification);
+    }
+  }
+  renderSchedule(); renderTasks(); renderNotes(); renderCourses(); renderReminders(); renderHomeTimer(); renderThemeList();
+  setHeader('home');
+})();
+</script>
+</body>
+</html>

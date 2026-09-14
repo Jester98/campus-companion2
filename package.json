@@ -1,0 +1,13 @@
+{
+  "name": "campus-companion",
+  "version": "1.0.0",
+  "scripts": {
+    "sync:vendor": "node scripts/sync-vendor.js"
+  },
+  "devDependencies": { "@capacitor/cli": "8.5.1" },
+  "dependencies": {
+    "@capacitor/core": "8.5.1",
+    "@capacitor/android": "8.5.1",
+    "@capacitor/local-notifications": "8.3.1"
+  }
+}
