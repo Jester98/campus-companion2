@@ -2,6 +2,17 @@ ext {
   junitVersion = project.hasProperty('junitVersion') ? rootProject.ext.junitVersion : '4.13.2'
 }
 
+buildscript {
+  ext.kotlin_version = project.hasProperty('kotlinVersion') ? rootProject.ext.kotlinVersion : '2.0.21'
+  repositories {
+    google()
+    mavenCentral()
+  }
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+  }
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
