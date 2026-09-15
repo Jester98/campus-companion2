@@ -8,6 +8,7 @@
   "dependencies": {
     "@capacitor/core": "8.5.1",
     "@capacitor/android": "8.5.1",
-    "@capacitor/local-notifications": "8.3.1"
+    "@capacitor/local-notifications": "8.3.1",
+    "capacitor-study-alarm": "file:native-plugins/capacitor-study-alarm"
   }
 }
