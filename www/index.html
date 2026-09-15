@@ -406,7 +406,7 @@ width:100vw;height:100vh;height:100dvh;border-radius:0;border:none;box-shadow:no
    inset from the sides instead of just filling the width. */
 @media (orientation:landscape) and (max-height:480px){
 .phone{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);}
-.topbar,.screen,.navbar,.chat-input-row{max-width:480px;margin-left:auto;margin-right:auto;}
+.topbar,.screen,.navbar,.chat-input-row{max-width:min(680px,92%);margin-left:auto;margin-right:auto;}
 .picker-overlay{overflow-y:auto;}
 }
 .status{height:14px;flex-shrink:0;}
@@ -962,7 +962,7 @@ function greeting(){
   if(h < 18) return 'Good afternoon';
   return 'Good evening';
 }
- 
+
 let userName = '';
 function setHeader(key){
   const base = key==='home' ? greeting() : titles[key][0];
