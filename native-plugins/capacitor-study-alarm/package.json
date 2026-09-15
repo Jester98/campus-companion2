@@ -1,0 +1,14 @@
+{
+  "name": "capacitor-study-alarm",
+  "version": "1.0.0",
+  "description": "Local Capacitor plugin: a real, looping, lock-screen-capable alarm for the study timer (AlarmManager.setAlarmClock + a foreground service + a full-screen intent), used in place of a single-shot notification sound.",
+  "private": true,
+  "capacitor": {
+    "android": {
+      "src": "android"
+    }
+  },
+  "files": [
+    "android"
+  ]
+}
