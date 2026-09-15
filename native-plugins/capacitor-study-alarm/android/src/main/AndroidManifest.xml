@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+  <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+  <uses-permission android:name="android.permission.VIBRATE" />
+
+  <application>
+    <activity
+      android:name="com.campuscompanion.studyalarm.AlarmActivity"
+      android:exported="false"
+      android:excludeFromRecents="true"
+      android:launchMode="singleInstance"
+      android:theme="@android:style/Theme.DeviceDefault.NoActionBar" />
+
+    <service
+      android:name="com.campuscompanion.studyalarm.AlarmRingService"
+      android:exported="false"
+      android:foregroundServiceType="mediaPlayback" />
+
+    <receiver
+      android:name="com.campuscompanion.studyalarm.AlarmReceiver"
+      android:exported="false" />
+
+    <receiver
+      android:name="com.campuscompanion.studyalarm.StopAlarmReceiver"
+      android:exported="false" />
+  </application>
+</manifest>
