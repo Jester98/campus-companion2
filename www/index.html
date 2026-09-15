@@ -833,6 +833,42 @@ function ensureAlarmChannel(){
    function hasStudyAlarm(){
         return !!(StudyAlarm && window.Capacitor && Capacitor.isPluginAvailable && Capacitor.isPluginAvailable('StudyAlarm'));
    }
+
+   // Ask for notification permission and, on Android 12+, the "Alarms &
+   // reminders" exact-alarm permission the very first time the app is
+   // opened -- rather than waiting for the user to find the Settings
+   // toggle -- so the study timer's real alarm and class/assignment
+   // reminders work right away. Only ever runs once per install.
+   async function requestStartupPermissions(){
+      if(localStorage.getItem('cc_startup_perms_asked')) return;
+      localStorage.setItem('cc_startup_perms_asked', '1');
+
+      const ln = getLN();
+      if(ln){
+         try {
+            const perm = await ln.requestPermissions();
+            if(perm.display === 'granted'){
+               notificationsEnabled = true;
+               const toggle = document.getElementById('notifToggle');
+               if(toggle) toggle.checked = true;
+               ensureAlarmChannel();
+               tasks.filter(t=>!t.done).forEach(scheduleTaskNotification);
+               classes.forEach(scheduleClassNotification);
+               updateNotifStatusText();
+               saveData();
+            }
+         } catch(e){}
+      }
+
+      if(hasStudyAlarm()){
+         try {
+            const status = await StudyAlarm.checkExactAlarmPermission();
+            if(!status.granted){
+               await StudyAlarm.requestExactAlarmPermission();
+            }
+         } catch(e){}
+      }
+   }
 async function setNotifications(checked){
   const ln = getLN();
   if(!checked){
@@ -1525,6 +1561,7 @@ function addReminder(){
   }
   renderSchedule(); renderTasks(); renderNotes(); renderCourses(); renderReminders(); renderHomeTimer(); renderThemeList();
   setHeader('home');
+   requestStartupPermissions();
 })();
 </script>
 </body>
