@@ -817,6 +817,22 @@ function ensureAlarmChannel(){
     visibility: 1
   }).then(()=>{ alarmChannelReady = true; }).catch(()=>{});
 }
+   // ---------- Real native alarm (loops + can show over the lock screen) ----------
+   // A proper Android alarm-clock experience for the study timer, built as a
+   // small local Capacitor plugin (native-plugins/capacitor-study-alarm) rather
+   // than a plain scheduled notification: it loops the sound until the user
+   // hits Stop, and can wake/show itself over the lock screen. Falls back to
+   // the old single-shot LocalNotifications alert below if the plugin isn't
+   // present (e.g. running in a plain browser preview).
+   let StudyAlarm = null;
+   try {
+  if(window.Capacitor && Capacitor.registerPlugin){
+    StudyAlarm = Capacitor.registerPlugin('StudyAlarm');
+  }
+   } catch(e){ StudyAlarm = null; }
+   function hasStudyAlarm(){
+        return !!(StudyAlarm && window.Capacitor && Capacitor.isPluginAvailable && Capacitor.isPluginAvailable('StudyAlarm'));
+   }
 async function setNotifications(checked){
   const ln = getLN();
   if(!checked){
@@ -866,33 +882,44 @@ function updateNotifStatusText(){
   const el = document.getElementById('notifStatusText');
   if(el) el.textContent = notificationsEnabled ? 'On — classes, due dates and timer alerts' : 'Classes, due dates and timer alerts';
 }
-// NOTE on the timer "alarm": a local notification's sound plays once when it
-// posts — Android has no built-in way to make a plain notification ring on
-// a loop like a real alarm clock without a foreground service holding a
-// wake lock, which is well beyond what this plugin (or a no-custom-native-
-// code app) supports. This gets as close as that ceiling allows: a
-// dedicated max-importance channel, a distinct louder sound, strong
-// vibration, and `ongoing` so it can't be swiped away by accident.
-function scheduleTimerNotification(seconds){
-  const ln = getLN();
-  if(!ln || !notificationsEnabled) return;
-  ensureAlarmChannel();
-  ln.cancel({ notifications: [{ id: TIMER_NOTIF_ID }] }).catch(()=>{});
-  ln.schedule({ notifications: [{
-    id: TIMER_NOTIF_ID,
-    title: "Time's up!",
-    body: 'Your focus session just ended — nice work.',
-    channelId: TIMER_CHANNEL_ID,
-    sound: 'study_alarm',
-    ongoing: true,
-    schedule: { at: new Date(Date.now() + seconds * 1000) }
-  }]}).catch(()=>{});
-}
-function cancelTimerNotification(){
-  const ln = getLN();
-  if(!ln) return;
-  ln.cancel({ notifications: [{ id: TIMER_NOTIF_ID }] }).catch(()=>{});
-}
+// The study timer's completion alert. When the native StudyAlarm plugin is
+   // available (real Android build), this rings continuously — like a real
+   // alarm clock — until the user hits Stop, and can show itself over the
+   // lock screen. Otherwise it falls back to the old single-shot
+   // LocalNotifications alert (dedicated max-importance channel, distinct
+   // louder sound, strong vibration, `ongoing` so it can't be swiped away).
+   function scheduleTimerNotification(seconds){
+      if(!notificationsEnabled) return;
+      if(hasStudyAlarm()){
+         StudyAlarm.schedule({
+            atMillis: Date.now() + seconds * 1000,
+            title: "Time's up!",
+            body: 'Your focus session just ended — nice work.'
+         }).catch(()=>{});
+         return;
+      }
+      const ln = getLN();
+      if(!ln) return;
+      ensureAlarmChannel();
+      ln.cancel({ notifications: [{ id: TIMER_NOTIF_ID }] }).catch(()=>{});
+      ln.schedule({ notifications: [{
+         id: TIMER_NOTIF_ID,
+         title: "Time's up!",
+         body: 'Your focus session just ended — nice work.',
+         channelId: TIMER_CHANNEL_ID,
+         sound: 'study_alarm',
+         ongoing: true,
+         schedule: { at: new Date(Date.now() + seconds * 1000) }
+      }]}).catch(()=>{});
+   }
+   function cancelTimerNotification(){
+      if(hasStudyAlarm()){
+         StudyAlarm.cancel().catch(()=>{});
+      }
+      const ln = getLN();
+      if(!ln) return;
+      ln.cancel({ notifications: [{ id: TIMER_NOTIF_ID }] }).catch(()=>{});
+   }
 function scheduleTaskNotification(task){
   const ln = getLN();
   if(!ln || !notificationsEnabled || !task.dueRaw) return;
