@@ -127,7 +127,7 @@ class AlarmRingService : Service() {
           enableVibration(false)
           setSound(null, null)
         }
-        nm.createChannel(channel)
+        nm.createNotificationChannel(channel)
       }
     }
 
