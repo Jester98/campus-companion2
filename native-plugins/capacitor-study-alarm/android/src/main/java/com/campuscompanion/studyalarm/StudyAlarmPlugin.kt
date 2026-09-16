@@ -36,6 +36,17 @@ class StudyAlarmPlugin : Plugin() {
     val context = context
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
+    // Android 12+ (API 31) requires the SCHEDULE_EXACT_ALARM permission to be
+    // explicitly granted via system settings before an exact alarm can be
+    // scheduled -- calling setAlarmClock() without it throws a
+    // SecurityException that would otherwise crash the whole app. Reject
+    // cleanly instead so the caller (JS) can fall back to a plain
+    // notification.
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+      call.reject("SCHEDULE_EXACT_ALARM permission not granted")
+      return
+    }
+
     val showIntent = Intent(context, AlarmActivity::class.java).apply {
       flags = Intent.FLAG_ACTIVITY_NEW_TASK
     }
@@ -54,8 +65,13 @@ class StudyAlarmPlugin : Plugin() {
       PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
       )
 
-    val info = AlarmManager.AlarmClockInfo(atMillis, showPendingIntent)
-    alarmManager.setAlarmClock(info, firePendingIntent)
+    try {
+      val info = AlarmManager.AlarmClockInfo(atMillis, showPendingIntent)
+      alarmManager.setAlarmClock(info, firePendingIntent)
+    } catch (e: SecurityException) {
+      call.reject("Unable to schedule exact alarm: ${e.message}")
+      return
+    }
 
     context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit()
     .putLong(PREF_SCHEDULED_AT, atMillis).apply()
@@ -95,34 +111,34 @@ class StudyAlarmPlugin : Plugin() {
     ret.put("scheduled", at > System.currentTimeMillis())
     if (at > 0) ret.put("atMillis", at)
     call.resolve(ret)
+  }
 
-    @PluginMethod
-    fun checkExactAlarmPermission(call: PluginCall) {
-      val granted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.canScheduleExactAlarms()
-      } else {
-        true
-      }
-      val ret = JSObject()
-      ret.put("granted", granted)
-      call.resolve(ret)
+  @PluginMethod
+  fun checkExactAlarmPermission(call: PluginCall) {
+    val granted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+      alarmManager.canScheduleExactAlarms()
+    } else {
+      true
     }
+    val ret = JSObject()
+    ret.put("granted", granted)
+    call.resolve(ret)
+  }
 
-    @PluginMethod
-    fun requestExactAlarmPermission(call: PluginCall) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        val context = context
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        if (!alarmManager.canScheduleExactAlarms()) {
-          val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-            data = Uri.parse("package:" + context.packageName)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-          }
-          context.startActivity(intent)
+  @PluginMethod
+  fun requestExactAlarmPermission(call: PluginCall) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      val context = context
+      val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+      if (!alarmManager.canScheduleExactAlarms()) {
+        val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+          data = Uri.parse("package:" + context.packageName)
+          flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
+        context.startActivity(intent)
       }
-      call.resolve()
     }
+    call.resolve()
   }
 }
