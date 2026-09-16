@@ -925,29 +925,38 @@ function updateNotifStatusText(){
    // LocalNotifications alert (dedicated max-importance channel, distinct
    // louder sound, strong vibration, `ongoing` so it can't be swiped away).
    function scheduleTimerNotification(seconds){
-      if(!notificationsEnabled) return;
-      if(hasStudyAlarm()){
-         StudyAlarm.schedule({
-            atMillis: Date.now() + seconds * 1000,
-            title: "Time's up!",
-            body: 'Your focus session just ended — nice work.'
-         }).catch(()=>{});
-         return;
-      }
-      const ln = getLN();
-      if(!ln) return;
-      ensureAlarmChannel();
-      ln.cancel({ notifications: [{ id: TIMER_NOTIF_ID }] }).catch(()=>{});
-      ln.schedule({ notifications: [{
-         id: TIMER_NOTIF_ID,
-         title: "Time's up!",
-         body: 'Your focus session just ended — nice work.',
-         channelId: TIMER_CHANNEL_ID,
-         sound: 'study_alarm',
-         ongoing: true,
-         schedule: { at: new Date(Date.now() + seconds * 1000) }
-      }]}).catch(()=>{});
+            if(!notificationsEnabled) return;
+            if(hasStudyAlarm()){
+                       StudyAlarm.schedule({
+                                    atMillis: Date.now() + seconds * 1000,
+                                    title: "Time's up!",
+                                    body: 'Your focus session just ended — nice work.'
+                       }).catch(()=>{
+                                    // Native alarm couldn't be scheduled -- most likely the
+                                    // "Alarms & reminders" permission hasn't been granted yet.
+                                    // Fall back to a plain one-shot notification so the timer
+                                    // still alerts the user instead of silently doing nothing.
+                                    scheduleTimerNotificationFallback(seconds);
+                       });
+                       return;
+            }
+            scheduleTimerNotificationFallback(seconds);
    }
+       function scheduleTimerNotificationFallback(seconds){
+                const ln = getLN();
+                if(!ln) return;
+                ensureAlarmChannel();
+                ln.cancel({ notifications: [{ id: TIMER_NOTIF_ID }] }).catch(()=>{});
+                ln.schedule({ notifications: [{
+                           id: TIMER_NOTIF_ID,
+                           title: "Time's up!",
+                           body: 'Your focus session just ended — nice work.',
+                           channelId: TIMER_CHANNEL_ID,
+                           sound: 'study_alarm',
+                           ongoing: true,
+                           schedule: { at: new Date(Date.now() + seconds * 1000) }
+                }]}).catch(()=>{});
+       }
    function cancelTimerNotification(){
       if(hasStudyAlarm()){
          StudyAlarm.cancel().catch(()=>{});
