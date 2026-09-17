@@ -731,6 +731,14 @@ display:flex;align-items:center;justify-content:center;padding:30px;
 <div class="card">
 <p class="small muted" style="margin:0;">Campus Companion, prototype v0.1</p>
 </div>
+   <div class="section-label">Data</div>
+   <div class="card">
+      <p class="small muted" style="margin:0 0 10px;">Move your classes, assignments, notes and GPA to another device, or just keep a backup.</p>p>
+      <div style="display:flex;gap:8px;">
+         <button class="ghost-btn" style="flex:1;" onclick="openExportData()">Export data</button>
+         <button class="ghost-btn" style="flex:1;" onclick="openImportData()">Import data</button>
+      </div>
+   </div>
 </div>
 <div class="navbar">
 <button class="navbtn active" data-tab="home" onclick="switchTab('home')">
@@ -757,6 +765,9 @@ Tools
 <div class="picker-overlay hidden" id="pickerOverlay" onclick="closePicker()">
 <div class="picker-sheet" id="pickerSheet" onclick="event.stopPropagation()"></div>
 </div>
+   <div class="picker-overlay hidden" id="dataOverlay" onclick="closeDataOverlay()">
+      <div class="picker-sheet" id="dataSheet" onclick="event.stopPropagation()"></div>
+   </div>
 </div>
 <script>
 // ---------- STORAGE ----------
@@ -772,6 +783,101 @@ function saveData(){
 function loadData(){
   try { return JSON.parse(localStorage.getItem('cc_data')); } catch(e){ return null; }
 }
+   // ---------- Transfer data (export / import) ----------
+   // Everything lives in this browser's localStorage on this one device --
+   // classes, assignments, notes, GPA courses, theme, all of it. Reinstall
+   // the app or move to a new phone and it's gone with no way back. These
+   // let the user copy their data out as plain text (to save somewhere, or
+   // paste into the app on another device) and load it back in.
+   function buildExportPayload(){
+        saveData();
+        return localStorage.getItem('cc_data') || '{}';
+   }
+   function closeDataOverlay(){
+        document.getElementById('dataOverlay').classList.add('hidden');
+   }
+   function openExportData(){
+        const json = buildExportPayload();
+        document.getElementById('dataSheet').innerHTML =
+               '<div class="picker-header"><span>Export your data</span><button class="picker-nav" onclick="closeDataOverlay()">&times;</button></div>' +
+               '<p class="small muted" style="margin:0 0 8px;">Copy this text somewhere safe -- a notes app, an email to yourself. Paste it into "Import data" on this or another device to restore everything.</p>' +
+               '<textarea id="exportText" readonly style="width:100%;height:140px;font-family:var(--font-mono);font-size:11px;" onclick="this.select()">' + json + '</textarea>' +
+               '<div class="picker-footer"><span class="picker-text-btn" onclick="closeDataOverlay()">Close</span><button class="fab-btn" id="copyDataBtn" onclick="copyExportText()">Copy to clipboard</button></div>';
+        document.getElementById('dataOverlay').classList.remove('hidden');
+        const ta = document.getElementById('exportText');
+        ta.focus(); ta.select();
+   }
+   function copyExportText(){
+        const ta = document.getElementById('exportText');
+        ta.focus(); ta.select();
+        const flash = ()=>{
+               const btn = document.getElementById('copyDataBtn');
+               if(!btn) return;
+               const old = btn.textContent;
+               btn.textContent = 'Copied!';
+               setTimeout(()=>{ if(btn) btn.textContent = old; }, 1500);
+        };
+        if(navigator.clipboard && navigator.clipboard.writeText){
+               navigator.clipboard.writeText(ta.value).then(flash).catch(()=>{
+                        try { document.execCommand('copy'); flash(); } catch(e){}
+               });
+        } else {
+               try { document.execCommand('copy'); flash(); } catch(e){}
+        }
+   }
+   function openImportData(){
+        document.getElementById('dataSheet').innerHTML =
+               '<div class="picker-header"><span>Import data</span><button class="picker-nav" onclick="closeDataOverlay()">&times;</button></div>' +
+               '<p class="small muted" style="margin:0 0 8px;">Paste data exported from Campus Companion below. This replaces everything currently in the app on this device.</p>' +
+               '<textarea id="importText" placeholder="Paste exported data here" style="width:100%;height:140px;font-family:var(--font-mono);font-size:11px;"></textarea>' +
+               '<p class="small" id="importError" style="margin:6px 0 0;color:var(--danger);display:none;"></p>' +
+               '<div class="picker-footer"><span class="picker-text-btn" onclick="closeDataOverlay()">Cancel</span><button class="fab-btn" onclick="runImportData()">Import</button></div>';
+        document.getElementById('dataOverlay').classList.remove('hidden');
+   }
+   function runImportData(){
+        const raw = (document.getElementById('importText').value || '').trim();
+        const errEl = document.getElementById('importError');
+        errEl.style.display = 'none';
+        if(!raw){ errEl.textContent = 'Paste your exported data first.'; errEl.style.display = 'block'; return; }
+        let d;
+        try { d = JSON.parse(raw); } catch(e){ d = null; }
+        if(!d || typeof d !== 'object'){
+               errEl.textContent = "That doesn't look like valid exported data.";
+               errEl.style.display = 'block';
+               return;
+        }
+        userName = d.userName || '';
+        classes = d.classes || []; classId = d.classId || 1;
+        tasks = d.tasks || []; taskId = d.taskId || 1;
+        notes = d.notes || []; noteId = d.noteId || 1;
+        courses = d.courses || []; courseId = d.courseId || 1;
+        reminders = d.reminders || []; reminderId = d.reminderId || 1;
+        purchasedThemes = d.purchasedThemes || [];
+        notificationsEnabled = !!d.notificationsEnabled;
+        if(d.theme && THEMES.some(t=>t.id===d.theme) && isThemeUnlocked(d.theme)){
+               document.body.setAttribute('data-theme', d.theme);
+        } else {
+               document.body.setAttribute('data-theme', 'light');
+        }
+        const notifToggleEl = document.getElementById('notifToggle');
+        if(notifToggleEl) notifToggleEl.checked = notificationsEnabled;
+        updateNotifStatusText();
+        if(notificationsEnabled){
+               ensureAlarmChannel();
+               tasks.filter(t=>!t.done).forEach(scheduleTaskNotification);
+               classes.forEach(scheduleClassNotification);
+        }
+        const onboardingEl = document.getElementById('onboarding');
+        const settingsNameEl = document.getElementById('settingsName');
+        if(userName){
+               if(onboardingEl) onboardingEl.classList.add('hidden');
+               if(settingsNameEl) settingsNameEl.textContent = userName;
+        }
+        saveData();
+        renderSchedule(); renderTasks(); renderNotes(); renderCourses(); renderReminders(); renderHomeTimer(); renderThemeList();
+        closeDataOverlay();
+        setHeader('home');
+   }
 // ---------- Notifications ----------
 let notificationsEnabled = false;
 const TIMER_NOTIF_ID = 900000;      // the study timer's one-shot completion alert
